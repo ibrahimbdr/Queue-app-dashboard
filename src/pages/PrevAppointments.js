@@ -7,7 +7,7 @@ import Bottombar from "../components/Bottombar";
 import loginContext from "../context/LoginContext";
 import { useNavigate } from "react-router-dom";
 
-const Appointments = () => {
+const PrevAppointments = () => {
   const { state, setSidebarExtend } = React.useContext(sidebarContext);
   const value = React.useContext(sidebarContext);
   const [appointments, setAppointments] = React.useState([]);
@@ -27,18 +27,16 @@ const Appointments = () => {
   //   return res;
   // }
 
-  const handleAppoinmentStatus = (id) => {
+  const handleCompleteApp = (id) => {
     console.log(id);
 
     axiosInstance
       .patch(
         `/admin/appointment/${id}`,
-        { status: "Finished" },
+        JSON.stringify({ status: "Finished" }),
         {
           headers: {
             Authorization: token,
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
           },
         }
       )
@@ -48,7 +46,6 @@ const Appointments = () => {
       .catch((err) => {
         console.log(err);
       });
-    navigate("/appointments");
   };
   useEffect(() => {
     axiosInstance
@@ -60,7 +57,10 @@ const Appointments = () => {
       .then((res) => {
         // console.log([...appointments, ...res.data]);
         console.log(res.data);
-        setAppointments(res.data);
+        let finishedApp = res.data.filter((data) => {
+          return data.status === "Finished";
+        });
+        setAppointments(finishedApp);
         // appointmentsPages.current = sliceIntoChunks(appointments, 10);
         // console.log("Here is appoinments array");
         console.log(appointments);
@@ -87,7 +87,7 @@ const Appointments = () => {
         />
         <Bottombar />
         <div className={`p-6 mb-4 w-full`}>
-          <h1 className="text-2xl font-bold mb-14">Appointments</h1>
+          <h1 className="text-2xl font-bold mb-14">History</h1>
           <div className="flex flex-col">
             <div className="overflow-x-auto">
               <div className="p-1.5 w-full inline-block align-middle">
@@ -131,12 +131,12 @@ const Appointments = () => {
                         >
                           Status
                         </th>
-                        <th
+                        {/* <th
                           scope="col"
                           className="px-2 py-3 text-start text-xs font-bold text-gray-500 uppercase "
                         >
                           Action
-                        </th>
+                        </th> */}
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
@@ -147,7 +147,7 @@ const Appointments = () => {
                             align="center"
                             colspan="4"
                           >
-                            There are no Appointments
+                            There are no Finished Appointments
                           </td>
                         </tr>
                       ) : (
@@ -189,10 +189,10 @@ const Appointments = () => {
                                   </p>
                                 }
                               </td>
-                              <td className="px-2 py-4 text-start text-sm font-medium rounded whitespace-nowrap">
+                              {/* <td className="px-2 py-4 text-start text-sm font-medium rounded whitespace-nowrap">
                                 <button
                                   onClick={() =>
-                                    handleAppoinmentStatus(appointment["_id"])
+                                    handleCompleteApp(appointment._id)
                                   }
                                   className="text-green-500 hover:text-green-700"
                                 >
@@ -201,7 +201,7 @@ const Appointments = () => {
                                     size={20}
                                   />
                                 </button>
-                              </td>
+                              </td> */}
                             </tr>
                           );
                         })
@@ -237,4 +237,4 @@ const Appointments = () => {
   }
 };
 
-export default Appointments;
+export default PrevAppointments;

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useMemo } from "react";
 import { BsCheck2Square } from "react-icons/bs";
-import { TiDelete } from "react-icons/ti";
+import { TiDelete, TiTrash } from "react-icons/ti";
 import sidebarContext from "../context/SidebarContext";
 import axiosInstance from "../axios config/axiosInstance";
 import Sidebar from "../components/Sidebar";
@@ -8,7 +8,7 @@ import Bottombar from "../components/Bottombar";
 import loginContext from "../context/LoginContext";
 import { useNavigate } from "react-router-dom";
 
-const Customers = () => {
+const PrevCustomers = () => {
   const { state, setSidebarExtend } = React.useContext(sidebarContext);
   const value = React.useContext(sidebarContext);
   const [customers, setCustomers] = React.useState([]);
@@ -37,7 +37,12 @@ const Customers = () => {
       })
       .then((res) => {
         console.log([...customers, ...res.data]);
-        setCustomers(res.data);
+        let NonActiveCustomers = res.data.filter((data) => {
+          return !data.active;
+        });
+        console.log(NonActiveCustomers);
+        setCustomers(NonActiveCustomers);
+        console.log(customers);
       })
       .catch((err) => {
         console.log(err);
@@ -60,7 +65,7 @@ const Customers = () => {
         />
         <Bottombar />
         <div className={`p-6 mb-4  ml-5 w-full`}>
-          <h1 className="text-2xl font-bold mb-14">Active Customers</h1>
+          <h1 className="text-2xl font-bold mb-14">NonActive Customers</h1>
 
           <div className="flex flex-col">
             <div className="overflow-x-auto">
@@ -103,7 +108,7 @@ const Customers = () => {
                           scope="col"
                           className="px-2 py-3 text-xs font-bold text-left text-gray-500 uppercase "
                         >
-                          Remove
+                          Delete
                         </th>
                       </tr>
                     </thead>
@@ -115,7 +120,7 @@ const Customers = () => {
                             align="center"
                             colspan="4"
                           >
-                            There are no Registered Customers
+                            There are no Non-Active Customers
                           </td>
                         </tr>
                       ) : (
@@ -150,10 +155,7 @@ const Customers = () => {
                             </td> */}
                               <td className="px-2 py-4 text-sm text-gray-800 whitespace-nowrap">
                                 <button>
-                                  <TiDelete
-                                    className="text-red-600"
-                                    size={30}
-                                  />
+                                  <TiTrash className="text-red-600" size={30} />
                                 </button>
                               </td>
                             </tr>
@@ -191,4 +193,4 @@ const Customers = () => {
   }
 };
 
-export default Customers;
+export default PrevCustomers;

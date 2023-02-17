@@ -1,7 +1,8 @@
 import React from "react";
 import { MdOutlineDashboardCustomize } from "react-icons/md";
 import { GoListOrdered } from "react-icons/go";
-import { FaUsers } from "react-icons/fa";
+import { GrHistory } from "react-icons/gr";
+import { FaUsers, FaUsersSlash } from "react-icons/fa";
 import { BsArrowRight, BsArrowLeft, BsFillGearFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import sidebarContext from "../context/SidebarContext";
@@ -11,10 +12,8 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`self-start sticky top-0 ${
-        !state.sidebarExtend ? "col-span-1" : "col-span-2  "
-      } h-screen hidden md:block ${
-        state.sidebarExtend ? "w-[200px]" : "w-fit"
+      className={`self-start sticky top-0 h-screen hidden md:block ${
+        state.sidebarExtend ? "w-[300px]" : "w-fit"
       } bg-gray-50 text-black font-semibold`}
     >
       <div
@@ -76,6 +75,21 @@ const Sidebar = () => {
             )}
           </li>
         </Link>
+        <Link to="/appointments-f">
+          <li
+            className={`py-6 pl-3 flex items-center hover:bg-gray-300 shadow-inner ${
+              !state.sidebarExtend && "justify-center"
+            }`}
+          >
+            {state.sidebarExtend ? (
+              <>
+                <GrHistory className="mr-1" /> Queue History
+              </>
+            ) : (
+              <GrHistory size={40} />
+            )}
+          </li>
+        </Link>
         <Link to="/customers">
           <li
             className={`py-6 pl-3 flex items-center hover:bg-gray-300 shadow-inner ${
@@ -85,10 +99,26 @@ const Sidebar = () => {
             {state.sidebarExtend ? (
               <>
                 <FaUsers className="mr-1" />
-                All Customers
+                Active Customers
               </>
             ) : (
               <FaUsers size={40} />
+            )}
+          </li>
+        </Link>
+        <Link to="/customers-n">
+          <li
+            className={`py-6 pl-3 flex items-center hover:bg-gray-300 shadow-inner ${
+              !state.sidebarExtend && "justify-center"
+            }`}
+          >
+            {state.sidebarExtend ? (
+              <>
+                <FaUsersSlash className="mr-1" />
+                NonActive Customers
+              </>
+            ) : (
+              <FaUsersSlash size={40} />
             )}
           </li>
         </Link>
