@@ -1,5 +1,8 @@
 import React, { useEffect, useLayoutEffect, useRef, useMemo } from "react";
-import { BsCheck2Square } from "react-icons/bs";
+import {
+  RiCheckboxBlankCircleLine,
+  RiCheckboxBlankCircleFill,
+} from "react-icons/ri";
 import sidebarContext from "../context/SidebarContext";
 import axiosInstance from "../axios config/axiosInstance";
 import Sidebar from "../components/Sidebar";
@@ -27,7 +30,7 @@ const Appointments = () => {
   //   return res;
   // }
 
-  const handleAppoinmentStatus = (id) => {
+  const handleAppoinmentStatusF = (id) => {
     console.log(id);
 
     axiosInstance
@@ -38,7 +41,6 @@ const Appointments = () => {
           headers: {
             Authorization: token,
             "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
           },
         }
       )
@@ -48,7 +50,64 @@ const Appointments = () => {
       .catch((err) => {
         console.log(err);
       });
-    navigate("/appointments");
+    axiosInstance
+      .get(`/admin/appointment`, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((res) => {
+        // console.log([...appointments, ...res.data]);
+        console.log(res.data);
+        setAppointments(res.data);
+        // appointmentsPages.current = sliceIntoChunks(appointments, 10);
+        // console.log("Here is appoinments array");
+        console.log(appointments);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleAppoinmentStatusW = (id) => {
+    console.log(id);
+
+    axiosInstance
+      .patch(
+        `/admin/appointment/${id}`,
+        { status: "Waiting" },
+        {
+          headers: {
+            Authorization: token,
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Methods": ["PATCH"],
+            "Access-Control-Allow-Origin": "http://127.0.0.1:4000",
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    axiosInstance
+      .get(`/admin/appointment`, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((res) => {
+        // console.log([...appointments, ...res.data]);
+        console.log(res.data);
+        setAppointments(res.data);
+        // appointmentsPages.current = sliceIntoChunks(appointments, 10);
+        // console.log("Here is appoinments array");
+        console.log(appointments);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   useEffect(() => {
     axiosInstance
@@ -190,17 +249,36 @@ const Appointments = () => {
                                 }
                               </td>
                               <td className="px-2 py-4 text-start text-sm font-medium rounded whitespace-nowrap">
-                                <button
-                                  onClick={() =>
-                                    handleAppoinmentStatus(appointment["_id"])
-                                  }
-                                  className="text-green-500 hover:text-green-700"
-                                >
-                                  <BsCheck2Square
-                                    className="hover:text-green-400"
-                                    size={20}
-                                  />
-                                </button>
+                                {appointment.status === "Waiting" && (
+                                  <button
+                                    onClick={() =>
+                                      handleAppoinmentStatusF(
+                                        appointment["_id"]
+                                      )
+                                    }
+                                    className="text-red-500 hover:text-red-700"
+                                  >
+                                    <RiCheckboxBlankCircleFill
+                                      className="hover:text-red-400"
+                                      size={20}
+                                    />
+                                  </button>
+                                )}
+                                {appointment.status === "Finished" && (
+                                  <button
+                                    onClick={() =>
+                                      handleAppoinmentStatusW(
+                                        appointment["_id"]
+                                      )
+                                    }
+                                    className="text-green-500 hover:text-green-700"
+                                  >
+                                    <RiCheckboxBlankCircleLine
+                                      className="hover:text-green-400"
+                                      size={20}
+                                    />
+                                  </button>
+                                )}
                               </td>
                             </tr>
                           );

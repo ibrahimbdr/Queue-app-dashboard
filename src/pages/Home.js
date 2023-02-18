@@ -68,22 +68,22 @@ const Home = () => {
         <Bottombar />
         <div className="grid grid-cols-1 gap-3 w-full mt-8">
           <div className="mx-auto flex flex-col flex-wrap justify-center items-center text-lg font-bold rounded-md shadow-xl w-80 h-40 bg-gray-50">
-            <FaUsers size={40} className="text-gray-400" />
-            <p className="text-gray-900">Number Of Customers</p>
+            <FaUsers size={40} className="text-yellow-400" />
+            <p className="text-cyan-900">Number Of Customers</p>
             <p className="text-gray-900">{customers}</p>
           </div>
           <div className="mx-auto flex flex-col flex-wrap justify-center items-center text-lg font-bold rounded-md shadow-xl w-80 h-40 bg-gray-50">
-            <FaUserCheck size={40} className="text-gray-400" />
+            <FaUserCheck size={40} className="text-red-400" />
             <p className="text-gray-900">Next Appointments</p>
             <p className="text-gray-900">{waitingAppointments}</p>
           </div>
           <div className="mx-auto flex flex-col flex-wrap justify-center items-center text-lg font-bold rounded-md shadow-xl w-80 h-40 bg-gray-50">
-            <MdDone size={40} className="text-gray-400" />
+            <MdDone size={40} className="text-green-400" />
             <p className="text-gray-900">Finished Appointments</p>
             <p className="text-gray-900">{finishedAppointments}</p>
           </div>
           <div className="mx-auto flex flex-col flex-wrap justify-center items-center text-lg font-bold rounded-md shadow-xl w-80 h-40 bg-gray-50">
-            <IoTodaySharp size={40} className="text-gray-400" />
+            <IoTodaySharp size={40} className="text-blue-400" />
             <p className="text-gray-900">Today's Appointments</p>
             <p className="text-gray-900">{todayAppointment}</p>
           </div>

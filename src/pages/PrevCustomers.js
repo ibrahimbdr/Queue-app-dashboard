@@ -126,18 +126,19 @@ const PrevCustomers = () => {
                       ) : (
                         customers.map((customer, index) => {
                           return (
-                            <tr key={index}>
-                              <td className="px-2 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                                <span>{"0".repeat(index.length)}</span>
-                                {index + 1}
-                              </td>
-                              <td className="px-2 py-4 text-sm text-gray-800 whitespace-nowrap">
-                                {customer.name}
-                              </td>
-                              <td className="px-2 py-4 text-sm text-gray-800 whitespace-nowrap">
-                                {customer.phone}
-                              </td>
-                              {/* <td className="px-2 py-4 text-sm flex justify-center font-medium whitespace-nowrap">
+                            !customer.active && (
+                              <tr key={index}>
+                                <td className="px-2 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
+                                  <span>{"0".repeat(index.length)}</span>
+                                  {index + 1}
+                                </td>
+                                <td className="px-2 py-4 text-sm text-gray-800 whitespace-nowrap">
+                                  {customer.name}
+                                </td>
+                                <td className="px-2 py-4 text-sm text-gray-800 whitespace-nowrap">
+                                  {customer.phone}
+                                </td>
+                                {/* <td className="px-2 py-4 text-sm flex justify-center font-medium whitespace-nowrap">
                               {customer.appointment.number
                                 ? "have an appointment"
                                 : "does not an appointment"}
@@ -153,12 +154,16 @@ const PrevCustomers = () => {
                                 } w-fit text-sm text-white text-center rounded font-semibold p-1`}
                               ></p>
                             </td> */}
-                              <td className="px-2 py-4 text-sm text-gray-800 whitespace-nowrap">
-                                <button>
-                                  <TiTrash className="text-red-600" size={30} />
-                                </button>
-                              </td>
-                            </tr>
+                                <td className="px-2 py-4 text-sm text-gray-800 whitespace-nowrap">
+                                  <button>
+                                    <TiTrash
+                                      className="text-red-600"
+                                      size={30}
+                                    />
+                                  </button>
+                                </td>
+                              </tr>
+                            )
                           );
                         })
                       )}

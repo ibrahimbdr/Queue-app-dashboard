@@ -28,6 +28,45 @@ const Customers = () => {
     return res;
   }
 
+  const handleCustomerActive = (id) => {
+    console.log(id);
+
+    axiosInstance
+      .patch(
+        `/admin/customer/${id}`,
+        { active: false },
+        {
+          headers: {
+            Authorization: token,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    axiosInstance
+      .get(`/admin/customer`, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((res) => {
+        // console.log([...appointments, ...res.data]);
+        console.log(res.data);
+        setCustomers(res.data);
+        // appointmentsPages.current = sliceIntoChunks(appointments, 10);
+        // console.log("Here is appoinments array");
+        console.log(customers);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     axiosInstance
       .get(`/admin/customer`, {
@@ -103,7 +142,7 @@ const Customers = () => {
                           scope="col"
                           className="px-2 py-3 text-xs font-bold text-left text-gray-500 uppercase "
                         >
-                          Remove
+                          Deactivate
                         </th>
                       </tr>
                     </thead>
@@ -121,18 +160,19 @@ const Customers = () => {
                       ) : (
                         customers.map((customer, index) => {
                           return (
-                            <tr key={index}>
-                              <td className="px-2 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                                <span>{"0".repeat(index.length)}</span>
-                                {index + 1}
-                              </td>
-                              <td className="px-2 py-4 text-sm text-gray-800 whitespace-nowrap">
-                                {customer.name}
-                              </td>
-                              <td className="px-2 py-4 text-sm text-gray-800 whitespace-nowrap">
-                                {customer.phone}
-                              </td>
-                              {/* <td className="px-2 py-4 text-sm flex justify-center font-medium whitespace-nowrap">
+                            customer.active && (
+                              <tr key={index}>
+                                <td className="px-2 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
+                                  <span>{"0".repeat(index.length)}</span>
+                                  {index + 1}
+                                </td>
+                                <td className="px-2 py-4 text-sm text-gray-800 whitespace-nowrap">
+                                  {customer.name}
+                                </td>
+                                <td className="px-2 py-4 text-sm text-gray-800 whitespace-nowrap">
+                                  {customer.phone}
+                                </td>
+                                {/* <td className="px-2 py-4 text-sm flex justify-center font-medium whitespace-nowrap">
                               {customer.appointment.number
                                 ? "have an appointment"
                                 : "does not an appointment"}
@@ -148,15 +188,20 @@ const Customers = () => {
                                 } w-fit text-sm text-white text-center rounded font-semibold p-1`}
                               ></p>
                             </td> */}
-                              <td className="px-2 py-4 text-sm text-gray-800 whitespace-nowrap">
-                                <button>
-                                  <TiDelete
-                                    className="text-red-600"
-                                    size={30}
-                                  />
-                                </button>
-                              </td>
-                            </tr>
+                                <td className="px-2 py-4 text-sm text-gray-800 whitespace-nowrap">
+                                  <button
+                                    onClick={() =>
+                                      handleCustomerActive(customer["_id"])
+                                    }
+                                  >
+                                    <TiDelete
+                                      className="text-red-600"
+                                      size={30}
+                                    />
+                                  </button>
+                                </td>
+                              </tr>
+                            )
                           );
                         })
                       )}
