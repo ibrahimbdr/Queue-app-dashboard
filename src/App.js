@@ -4,15 +4,17 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Appointments from "./pages/Appointments";
 import Customers from "./pages/Customers";
-// import Sidebar from "./components/Sidebar";
-// import Bottombar from "./components/Bottombar";
+import Sidebar from "./components/Sidebar";
+import Bottombar from "./components/Bottombar";
 import sidebarContext from "./context/SidebarContext";
 import loginContext from "./context/LoginContext";
 import PrevCustomers from "./pages/PrevCustomers";
 import PrevAppointments from "./pages/PrevAppointments";
+import Settings from "./pages/Settings";
 
 function App() {
   const [sidebarExtend, setSidebarExtend] = React.useState(true);
+  const [colorMode, setColorMode] = React.useState("light");
   const [isLoggged, setIsLogged] = React.useState(
     localStorage.getItem("token") ? true : false
   );
@@ -29,12 +31,27 @@ function App() {
         value={{
           state: {
             sidebarExtend: sidebarExtend,
+            colorMode: colorMode,
           },
           setSidebarExtend: setSidebarExtend,
+          setColorMode: setColorMode,
         }}
       >
-        <div className="App">
+        <div className="App flex w-full h-screen">
           <Router>
+            {isLoggged && (
+              <div
+                className={`${
+                  sidebarExtend ? "md:mr-[200px]" : "md:mr-[78px]"
+                }`}
+              >
+                <Sidebar
+                  sidebarExtend={sidebarExtend}
+                  setSidebarExtend={setSidebarExtend}
+                />
+                <Bottombar />
+              </div>
+            )}
             <Routes>
               <Route path="/" exact element={<Home />} />
               <Route path="/customers" exact element={<Customers />} />
@@ -45,6 +62,7 @@ function App() {
                 exact
                 element={<PrevAppointments />}
               />
+              <Route path="/settings" exact element={<Settings />} />
               <Route path="/login" exact element={<Login />} />
             </Routes>
           </Router>

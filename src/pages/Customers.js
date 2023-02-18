@@ -92,41 +92,35 @@ const Customers = () => {
   }, []);
   if (login.state.isLoggged === true) {
     return (
-      <div className="flex justify-between">
-        <Sidebar
-          sidebarExtend={state.sidebarExtend}
-          setSidebarExtend={setSidebarExtend}
-        />
-        <Bottombar />
-        <div className={`p-6 mb-4  ml-5 w-full`}>
-          <h1 className="text-2xl font-bold mb-14">Active Customers</h1>
+      <div className={`p-6 mb-4  ml-5 w-full`}>
+        <h1 className="text-2xl font-bold mb-14">Active Customers</h1>
 
-          <div className="flex flex-col">
-            <div className="overflow-x-auto">
-              <div className="p-1.5 w-full inline-block align-middle">
-                <div className="overflow-hidden border rounded-lg">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th
-                          scope="col"
-                          className="px-2 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                        >
-                          #
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-2 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                        >
-                          Name
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-2 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                        >
-                          Phone
-                        </th>
-                        {/* <th
+        <div className="flex flex-col">
+          <div className="overflow-x-auto">
+            <div className="p-1.5 w-full inline-block align-middle">
+              <div className="overflow-hidden border rounded-lg">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th
+                        scope="col"
+                        className="px-2 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                      >
+                        #
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-2 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                      >
+                        Name
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-2 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                      >
+                        Phone
+                      </th>
+                      {/* <th
                           scope="col"
                           className="px-2 py-3 text-xs font-bold text-gray-500 uppercase "
                         >
@@ -138,41 +132,41 @@ const Customers = () => {
                         >
                           Queue status
                         </th> */}
-                        <th
-                          scope="col"
-                          className="px-2 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                      <th
+                        scope="col"
+                        className="px-2 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                      >
+                        Deactivate
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {customers === null || customers.length === 0 ? (
+                      <tr key="9999">
+                        <td
+                          className="text-center font-semibold text-lg"
+                          align="center"
+                          colspan="4"
                         >
-                          Deactivate
-                        </th>
+                          There are no Registered Customers
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200">
-                      {customers === null || customers.length === 0 ? (
-                        <tr key="9999">
-                          <td
-                            className="text-center font-semibold text-lg"
-                            align="center"
-                            colspan="4"
-                          >
-                            There are no Registered Customers
-                          </td>
-                        </tr>
-                      ) : (
-                        customers.map((customer, index) => {
-                          return (
-                            customer.active && (
-                              <tr key={index}>
-                                <td className="px-2 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                                  <span>{"0".repeat(index.length)}</span>
-                                  {index + 1}
-                                </td>
-                                <td className="px-2 py-4 text-sm text-gray-800 whitespace-nowrap">
-                                  {customer.name}
-                                </td>
-                                <td className="px-2 py-4 text-sm text-gray-800 whitespace-nowrap">
-                                  {customer.phone}
-                                </td>
-                                {/* <td className="px-2 py-4 text-sm flex justify-center font-medium whitespace-nowrap">
+                    ) : (
+                      customers.map((customer, index) => {
+                        return (
+                          customer.active && (
+                            <tr key={index}>
+                              <td className="px-2 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
+                                <span>{"0".repeat(index.length)}</span>
+                                {index + 1}
+                              </td>
+                              <td className="px-2 py-4 text-sm text-gray-800 whitespace-nowrap">
+                                {customer.name}
+                              </td>
+                              <td className="px-2 py-4 text-sm text-gray-800 whitespace-nowrap">
+                                {customer.phone}
+                              </td>
+                              {/* <td className="px-2 py-4 text-sm flex justify-center font-medium whitespace-nowrap">
                               {customer.appointment.number
                                 ? "have an appointment"
                                 : "does not an appointment"}
@@ -188,27 +182,27 @@ const Customers = () => {
                                 } w-fit text-sm text-white text-center rounded font-semibold p-1`}
                               ></p>
                             </td> */}
-                                <td className="px-2 py-4 text-sm text-gray-800 whitespace-nowrap">
-                                  <button
-                                    onClick={() =>
-                                      handleCustomerActive(customer["_id"])
-                                    }
-                                  >
-                                    <TiDelete
-                                      className="text-red-600"
-                                      size={30}
-                                    />
-                                  </button>
-                                </td>
-                              </tr>
-                            )
-                          );
-                        })
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-                {/* <div className="flex justify-center my-4">
+                              <td className="px-2 py-4 text-sm text-gray-800 whitespace-nowrap">
+                                <button
+                                  onClick={() =>
+                                    handleCustomerActive(customer["_id"])
+                                  }
+                                >
+                                  <TiDelete
+                                    className="text-red-600"
+                                    size={30}
+                                  />
+                                </button>
+                              </td>
+                            </tr>
+                          )
+                        );
+                      })
+                    )}
+                  </tbody>
+                </table>
+              </div>
+              {/* <div className="flex justify-center my-4">
                   {customersPages.current.map((pg, index) => {
                     return (
                       <button
@@ -227,7 +221,6 @@ const Customers = () => {
                     {">"}
                   </button>
                 </div> */}
-              </div>
             </div>
           </div>
         </div>

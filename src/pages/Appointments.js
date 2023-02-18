@@ -139,155 +139,145 @@ const Appointments = () => {
   }, []);
   if (login.state.isLoggged === true) {
     return (
-      <div className="flex justify-between ">
-        <Sidebar
-          sidebarExtend={state.sidebarExtend}
-          setSidebarExtend={setSidebarExtend}
-        />
-        <Bottombar />
-        <div className={`p-6 mb-4 w-full`}>
-          <h1 className="text-2xl font-bold mb-14">Appointments</h1>
-          <div className="flex flex-col">
-            <div className="overflow-x-auto">
-              <div className="p-1.5 w-full inline-block align-middle">
-                <div className="overflow-hidden border rounded-lg">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        {/* <th
+      <div className={`p-6 mb-4 w-full`}>
+        <h1 className="text-2xl font-bold mb-14">Appointments</h1>
+        <div className="flex flex-col">
+          <div className="overflow-x-auto">
+            <div className="p-1.5 w-full inline-block align-middle">
+              <div className="overflow-hidden border rounded-lg">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      {/* <th
                           scope="col"
                           className="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase "
                         >
                           #
                         </th> */}
-                        <th
-                          scope="col"
-                          className="px-2 py-3 text-start text-xs font-bold text-gray-500 uppercase "
+                      <th
+                        scope="col"
+                        className="px-2 py-3 text-start text-xs font-bold text-gray-500 uppercase "
+                      >
+                        Queue number
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-2 py-3 text-start text-xs font-bold text-gray-500 uppercase "
+                      >
+                        Customer
+                      </th>
+                      <th
+                        scope="col"
+                        className="hidden md:table-cell px-2 py-3 text-start text-xs font-bold text-gray-500 uppercase "
+                      >
+                        Reservation Date
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-2 py-3 text-start text-xs font-bold text-gray-500 uppercase "
+                      >
+                        Reservation Time
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-2 py-3 text-start text-xs font-bold text-gray-500 uppercase "
+                      >
+                        Status
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-2 py-3 text-start text-xs font-bold text-gray-500 uppercase "
+                      >
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {appointments === null || appointments.length === 0 ? (
+                      <tr key="9999">
+                        <td
+                          className="text-center font-semibold text-lg"
+                          align="center"
+                          colspan="4"
                         >
-                          Queue number
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-2 py-3 text-start text-xs font-bold text-gray-500 uppercase "
-                        >
-                          Customer
-                        </th>
-                        <th
-                          scope="col"
-                          className="hidden md:table-cell px-2 py-3 text-start text-xs font-bold text-gray-500 uppercase "
-                        >
-                          Reservation Date
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-2 py-3 text-start text-xs font-bold text-gray-500 uppercase "
-                        >
-                          Reservation Time
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-2 py-3 text-start text-xs font-bold text-gray-500 uppercase "
-                        >
-                          Status
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-2 py-3 text-start text-xs font-bold text-gray-500 uppercase "
-                        >
-                          Action
-                        </th>
+                          There are no Appointments
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200">
-                      {appointments === null || appointments.length === 0 ? (
-                        <tr key="9999">
-                          <td
-                            className="text-center font-semibold text-lg"
-                            align="center"
-                            colspan="4"
-                          >
-                            There are no Appointments
-                          </td>
-                        </tr>
-                      ) : (
-                        appointments.map((appointment, index) => {
-                          return (
-                            <tr key={index}>
-                              {/* <td className="px-6 py-4 text-start text-sm font-medium text-gray-800 whitespace-nowrap">
+                    ) : (
+                      appointments.map((appointment, index) => {
+                        return (
+                          <tr key={index}>
+                            {/* <td className="px-6 py-4 text-start text-sm font-medium text-gray-800 whitespace-nowrap">
                               <span>{"0".repeat(index.length)}</span>
                               {index + 1}
                             </td> */}
-                              <td className="px-2 py-4 text-start text-sm text-gray-800 whitespace-nowrap">
-                                {appointment.number}
-                              </td>
-                              <td className="px-2 py-4 text-start text-sm text-gray-800 whitespace-nowrap">
-                                {appointment.customer.name}
-                              </td>
-                              <td className="hidden md:table-cell px-2 py-4 text-start text-sm text-gray-800 whitespace-nowrap">
-                                {new Intl.DateTimeFormat(["ban", "id"]).format(
-                                  new Date(appointment.createdAt)
-                                )}
-                              </td>
-                              <td className="px-2 py-4 text-start text-sm text-gray-800 whitespace-nowrap">
-                                {new Intl.DateTimeFormat("en-GB", {
-                                  timeStyle: "short",
-                                }).format(new Date(appointment.createdAt))}
-                              </td>
-                              <td className="px-2 py-4 text-start text-sm font-medium rounded whitespace-nowrap">
-                                {
-                                  <p
-                                    className={`${
-                                      appointment.status === "Finished" &&
-                                      "bg-green-500"
-                                    } ${
-                                      appointment.status === "Waiting" &&
-                                      "bg-red-500"
-                                    } w-fit text-sm text-white text-center rounded font-semibold p-1`}
-                                  >
-                                    {appointment.status}
-                                  </p>
-                                }
-                              </td>
-                              <td className="px-2 py-4 text-start text-sm font-medium rounded whitespace-nowrap">
-                                {appointment.status === "Waiting" && (
-                                  <button
-                                    onClick={() =>
-                                      handleAppoinmentStatusF(
-                                        appointment["_id"]
-                                      )
-                                    }
-                                    className="text-red-500 hover:text-red-700"
-                                  >
-                                    <RiCheckboxBlankCircleFill
-                                      className="hover:text-red-400"
-                                      size={20}
-                                    />
-                                  </button>
-                                )}
-                                {appointment.status === "Finished" && (
-                                  <button
-                                    onClick={() =>
-                                      handleAppoinmentStatusW(
-                                        appointment["_id"]
-                                      )
-                                    }
-                                    className="text-green-500 hover:text-green-700"
-                                  >
-                                    <RiCheckboxBlankCircleLine
-                                      className="hover:text-green-400"
-                                      size={20}
-                                    />
-                                  </button>
-                                )}
-                              </td>
-                            </tr>
-                          );
-                        })
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-                {/* <div className="flex justify-center my-4">
+                            <td className="px-2 py-4 text-start text-sm text-gray-800 whitespace-nowrap">
+                              {appointment.number}
+                            </td>
+                            <td className="px-2 py-4 text-start text-sm text-gray-800 whitespace-nowrap">
+                              {appointment.customer.name}
+                            </td>
+                            <td className="hidden md:table-cell px-2 py-4 text-start text-sm text-gray-800 whitespace-nowrap">
+                              {new Intl.DateTimeFormat(["ban", "id"]).format(
+                                new Date(appointment.createdAt)
+                              )}
+                            </td>
+                            <td className="px-2 py-4 text-start text-sm text-gray-800 whitespace-nowrap">
+                              {new Intl.DateTimeFormat("en-GB", {
+                                timeStyle: "short",
+                              }).format(new Date(appointment.createdAt))}
+                            </td>
+                            <td className="px-2 py-4 text-start text-sm font-medium rounded whitespace-nowrap">
+                              {
+                                <p
+                                  className={`${
+                                    appointment.status === "Finished" &&
+                                    "bg-green-500"
+                                  } ${
+                                    appointment.status === "Waiting" &&
+                                    "bg-red-500"
+                                  } w-fit text-sm text-white text-center rounded font-semibold p-1`}
+                                >
+                                  {appointment.status}
+                                </p>
+                              }
+                            </td>
+                            <td className="px-2 py-4 text-start text-sm font-medium rounded whitespace-nowrap">
+                              {appointment.status === "Waiting" && (
+                                <button
+                                  onClick={() =>
+                                    handleAppoinmentStatusF(appointment["_id"])
+                                  }
+                                  className="text-red-500 hover:text-red-700"
+                                >
+                                  <RiCheckboxBlankCircleFill
+                                    className="hover:text-red-400"
+                                    size={20}
+                                  />
+                                </button>
+                              )}
+                              {appointment.status === "Finished" && (
+                                <button
+                                  onClick={() =>
+                                    handleAppoinmentStatusW(appointment["_id"])
+                                  }
+                                  className="text-green-500 hover:text-green-700"
+                                >
+                                  <RiCheckboxBlankCircleLine
+                                    className="hover:text-green-400"
+                                    size={20}
+                                  />
+                                </button>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })
+                    )}
+                  </tbody>
+                </table>
+              </div>
+              {/* <div className="flex justify-center my-4">
                   {appointmentsPages.current.map((pg, index) => {
                     return (
                       <button
@@ -306,7 +296,6 @@ const Appointments = () => {
                     {">"}
                   </button>
                 </div> */}
-              </div>
             </div>
           </div>
         </div>

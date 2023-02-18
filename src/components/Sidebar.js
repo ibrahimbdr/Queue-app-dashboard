@@ -1,19 +1,27 @@
 import React from "react";
-import { MdOutlineDashboardCustomize } from "react-icons/md";
+import { MdOutlineDashboardCustomize, MdLogout } from "react-icons/md";
 import { GoListOrdered } from "react-icons/go";
 import { GrHistory } from "react-icons/gr";
 import { FaUsers, FaUsersSlash } from "react-icons/fa";
 import { BsArrowRight, BsArrowLeft, BsFillGearFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import sidebarContext from "../context/SidebarContext";
+import loginContext from "../context/LoginContext";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const { state, setSidebarExtend } = React.useContext(sidebarContext);
-
+  const login = React.useContext(loginContext);
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    login.setIsLogged(false);
+    navigate("/login");
+  };
   return (
     <div
-      className={`self-start sticky top-0 h-screen hidden md:block ${
-        state.sidebarExtend ? "w-[300px]" : "w-fit"
+      className={`self-start fixed top-0 h-screen hidden md:block ${
+        state.sidebarExtend ? "w-[200px]" : "w-fit"
       } bg-gray-50 text-black font-semibold`}
     >
       <div
@@ -122,7 +130,7 @@ const Sidebar = () => {
             )}
           </li>
         </Link>
-        <Link to="#">
+        <Link to="/settings">
           <li
             className={`py-6 pl-3 flex items-center hover:bg-gray-300 shadow-inner ${
               !state.sidebarExtend && "justify-center"
@@ -137,6 +145,21 @@ const Sidebar = () => {
             )}
           </li>
         </Link>
+        <button onClick={handleLogout} className="mt-auto w-full">
+          <li
+            className={`py-6 pl-3 flex items-center hover:bg-gray-300 shadow-inner ${
+              !state.sidebarExtend && "justify-center"
+            }`}
+          >
+            {state.sidebarExtend ? (
+              <>
+                <MdLogout className="mr-1" /> Logout
+              </>
+            ) : (
+              <MdLogout size={40} />
+            )}
+          </li>
+        </button>
       </ul>
     </div>
   );
