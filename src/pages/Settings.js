@@ -8,6 +8,7 @@ import sidebarContext from "../context/SidebarContext";
 import { BiDownArrow, BiUpArrow } from "react-icons/bi";
 import { MdControlPoint, MdLightMode, MdNightlight } from "react-icons/md";
 import loginContext from "../context/LoginContext";
+import RegisterModel from "../components/RegisterModel";
 
 const Settings = () => {
   const { state, setSidebarExtend, setColorMode } =
@@ -17,6 +18,8 @@ const Settings = () => {
   const login = React.useContext(loginContext);
   const [phoneArr, setPhoneArr] = React.useState([]);
   const [nameArr, setNameArr] = React.useState([]);
+  const [customerRegModel, setCustomerRegModel] = React.useState(false);
+  const [managerRegModel, setManagerRegModel] = React.useState(false);
   const token = localStorage.getItem("token");
   React.useEffect(() => {
     if (login.state.accountType === "admin") {
@@ -67,6 +70,16 @@ const Settings = () => {
 
   return (
     <div className="w-full">
+      <RegisterModel
+        title={"Customer"}
+        setRegisterModel={setCustomerRegModel}
+        registerModel={customerRegModel}
+      />
+      <RegisterModel
+        title={"Manager"}
+        setRegisterModel={setManagerRegModel}
+        registerModel={managerRegModel}
+      />
       <div className={`mb-4 w-full`}>
         <h1 className="text-3xl font-bold mb-14 p-6">Settings</h1>
         <div className="w-full p-4">
@@ -124,6 +137,7 @@ const Settings = () => {
                         .catch((err) => {
                           console.log(err);
                         });
+                      setManagerRegModel(true);
                     }}
                   >
                     {({ isSubmitting }) => (
@@ -291,26 +305,7 @@ const Settings = () => {
                     .catch((err) => {
                       console.log(err);
                     });
-                  axiosInstance
-                    .post(
-                      "/customer/",
-
-                      values,
-                      {
-                        headers: {
-                          "Content-Type": "application/json",
-                        },
-                      }
-                    )
-                    .then((res) => {
-                      //   console.log(res.data);
-                      //   console.log("token-customer", res.data.token);
-                      //   localStorage.setItem("token-customer", res.data.token);
-                      //   if (res.data) navigate("/print2");
-                    })
-                    .catch((err) => {
-                      console.log(err);
-                    });
+                  setCustomerRegModel(true);
                 }}
               >
                 {({ isSubmitting, errors }) => (
