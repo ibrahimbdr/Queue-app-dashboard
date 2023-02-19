@@ -104,10 +104,10 @@ const Login = () => {
                   </div>
                   <button
                     type="submit"
-                    className="text-3xl mt-3 border border-gray-800 hover:bg-gray-800 hover:text-white mx-5 w-32 text-center rounded  py-2 transition-all"
+                    className="text-xl mt-3 border border-gray-800 hover:bg-gray-800 hover:text-white mx-5 w-32 text-center rounded  py-2 transition-all"
                     disabled={isSubmitting}
                   >
-                    Submit
+                    Login
                   </button>
                 </div>
               </Form>
@@ -181,10 +181,10 @@ const Login = () => {
                   </div>
                   <button
                     type="submit"
-                    className="text-3xl mt-3 border border-gray-800 hover:bg-gray-800 hover:text-white mx-5 w-32 text-center rounded  py-2 transition-all"
+                    className="text-xl mt-3 border border-gray-800 hover:bg-gray-800 hover:text-white mx-5 w-32 text-center rounded  py-2 transition-all"
                     disabled={isSubmitting}
                   >
-                    Submit
+                    Login
                   </button>
                 </div>
               </Form>

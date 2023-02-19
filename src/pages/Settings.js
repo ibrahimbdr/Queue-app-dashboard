@@ -68,13 +68,17 @@ const Settings = () => {
   return (
     <div className="w-full">
       <div className={`mb-4 w-full`}>
-        <h1 className="text-2xl font-bold mb-14 p-6">Settings</h1>
+        <h1 className="text-3xl font-bold mb-14 p-6">Settings</h1>
         <div className="w-full p-4">
-          <h2 className="text-2xl font-semibold">Accounts</h2>
+          <h2 className="text-2xl mb-2 font-semibold">Accounts</h2>
           {login.state.accountType === "admin" && (
             <>
               <div
-                className="w-full py-3 bg-gray-50 flex justify-between px-2"
+                className={`w-full py-3 ${
+                  state.colorMode === "dark"
+                    ? "bg-gray-900 text-cyan-700"
+                    : "bg-gray-50 text-black"
+                } flex justify-between px-2`}
                 onClick={() => setManagerAccountDiv(!mangerAccountDiv)}
               >
                 <h2 className="flex items-center cursor-pointer text-md font-medium ">
@@ -123,8 +127,20 @@ const Settings = () => {
                     }}
                   >
                     {({ isSubmitting }) => (
-                      <Form>
-                        <div className="p-4 shadow bg-gray-50 rounded">
+                      <Form
+                        className={`${
+                          state.colorMode === "dark"
+                            ? "bg-gray-900"
+                            : "bg-gray-50"
+                        }`}
+                      >
+                        <div
+                          className={`p-4 shadow ${
+                            state.colorMode === "dark"
+                              ? "bg-gray-900 text-cyan-700"
+                              : "bg-gray-50 text-white"
+                          } rounded`}
+                        >
                           <div className="my-4 w-full">
                             <label htmlFor="username" className="block">
                               Username
@@ -226,7 +242,11 @@ const Settings = () => {
             </>
           )}
           <div
-            className="w-full py-3 bg-gray-50 flex justify-between px-2"
+            className={`w-full py-3 ${
+              state.colorMode === "dark"
+                ? "bg-gray-900 text-cyan-700"
+                : "bg-gray-50 text-black"
+            } flex justify-between px-2`}
             onClick={() => setCustomerAccountDiv(!customerAccountDiv)}
           >
             <h2 className="flex items-center cursor-pointer text-md font-medium ">
@@ -294,8 +314,18 @@ const Settings = () => {
                 }}
               >
                 {({ isSubmitting, errors }) => (
-                  <Form className="bg-gray-50">
-                    <div className="p-4 shadow bg-gray-50 rounded">
+                  <Form
+                    className={`${
+                      state.colorMode === "dark" ? "bg-gray-900" : "bg-gray-50"
+                    }`}
+                  >
+                    <div
+                      className={`p-4 shadow ${
+                        state.colorMode === "dark"
+                          ? "bg-gray-900 text-cyan-700"
+                          : "bg-gray-50 text-white"
+                      } rounded`}
+                    >
                       <div className="my-4 w-full">
                         <label htmlFor="name" className="block">
                           Name
