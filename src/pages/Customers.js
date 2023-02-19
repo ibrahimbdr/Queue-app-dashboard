@@ -11,22 +11,21 @@ import { useNavigate } from "react-router-dom";
 const Customers = () => {
   const { state, setSidebarExtend } = React.useContext(sidebarContext);
   const value = React.useContext(sidebarContext);
-  const [customers, setCustomers] = React.useState([]);
+  const [customers, setCustomers] = React.useState([[]]);
   let token = localStorage.getItem("token");
   const login = React.useContext(loginContext);
   const navigate = useNavigate();
 
-  // const [pg, setPg] = React.useState(1);
-  // let customersPages = useRef([]);
+  const [page, setPage] = React.useState(1);
 
-  // function sliceIntoChunks(arr, chunkSize) {
-  //   const res = [];
-  //   for (let i = 0; i < arr.length; i += chunkSize) {
-  //     const chunk = arr.slice(i, i + chunkSize);
-  //     res.push(chunk);
-  //   }
-  //   return res;
-  // }
+  function sliceIntoChunks(arr, chunkSize) {
+    const res = [];
+    for (let i = 0; i < arr.length; i += chunkSize) {
+      const chunk = arr.slice(i, i + chunkSize);
+      res.push(chunk);
+    }
+    return res;
+  }
 
   const handleCustomerActive = (id) => {
     console.log(id);
@@ -55,11 +54,8 @@ const Customers = () => {
           },
         })
         .then((res) => {
-          // console.log([...appointments, ...res.data]);
           console.log(res.data);
-          setCustomers(res.data);
-          // appointmentsPages.current = sliceIntoChunks(appointments, 10);
-          // console.log("Here is appoinments array");
+          setCustomers(sliceIntoChunks(res.data, 10));
           console.log(customers);
         })
         .catch((err) => {
@@ -91,11 +87,8 @@ const Customers = () => {
           },
         })
         .then((res) => {
-          // console.log([...appointments, ...res.data]);
           console.log(res.data);
-          setCustomers(res.data);
-          // appointmentsPages.current = sliceIntoChunks(appointments, 10);
-          // console.log("Here is appoinments array");
+          setCustomers(sliceIntoChunks(res.data, 10));
           console.log(customers);
         })
         .catch((err) => {
@@ -114,7 +107,7 @@ const Customers = () => {
         })
         .then((res) => {
           console.log([...customers, ...res.data]);
-          setCustomers(res.data);
+          setCustomers(sliceIntoChunks(res.data, 10));
         })
         .catch((err) => {
           console.log(err);
@@ -129,17 +122,13 @@ const Customers = () => {
         })
         .then((res) => {
           console.log([...customers, ...res.data]);
-          setCustomers(res.data);
+          setCustomers(sliceIntoChunks(res.data, 10));
         })
         .catch((err) => {
           console.log(err);
         });
     }
   }, []);
-  //   useMemo(() => {
-  //     customersPages.current = sliceIntoChunks(customers, 10);
-  //     console.log(customersPages.current);
-  //   }, [customers, customersPages]);
 
   React.useEffect(() => {
     if (login.state.isLoggged === false) navigate("/login");
@@ -215,18 +204,18 @@ const Customers = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {customers === null || customers.length === 0 ? (
+                    {customers[page - 1] === null || customers.length === 0 ? (
                       <tr key="9999">
                         <td
                           className="text-center font-semibold text-lg"
                           align="center"
-                          colspan="4"
+                          colSpan="4"
                         >
                           There are no Registered Customers
                         </td>
                       </tr>
                     ) : (
-                      customers.map((customer, index) => {
+                      customers[page - 1].map((customer, index) => {
                         return (
                           customer.active && (
                             <tr key={index}>
@@ -300,25 +289,25 @@ const Customers = () => {
                   </tbody>
                 </table>
               </div>
-              {/* <div className="flex justify-center my-4">
-                  {customersPages.current.map((pg, index) => {
-                    return (
-                      <button
-                        key={index}
-                        onClick={() => setPg(index + 1)}
-                        className="w-10 h-10 p-2 text-center text-black border rounded  bg-BazRed hover:bg-gray-300 text-lg mx-1"
-                      >
-                        {index + 1}
-                      </button>
-                    );
-                  })}
-                  <button
+              <div className="flex justify-center my-4">
+                {customers.map((pg, index) => {
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => setPage(index + 1)}
+                      className="flex justify-center items-center w-10 h-10 p-2 text-center text-black border rounded  bg-BazRed hover:bg-gray-300 text-lg mx-1"
+                    >
+                      {index + 1}
+                    </button>
+                  );
+                })}
+                {/* <button
                     // onClick={() => {if(appoinmentsPages.length<index) setPage(index + 1)}}
                     className="w-10 h-10 p-2 text-center text-white bg-BazRed hover:bg-red-700 text-lg mx-1"
                   >
                     {">"}
-                  </button>
-                </div> */}
+                  </button> */}
+              </div>
             </div>
           </div>
         </div>

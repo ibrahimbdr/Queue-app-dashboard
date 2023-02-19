@@ -10,22 +10,21 @@ import { useNavigate } from "react-router-dom";
 const PrevAppointments = () => {
   const { state, setSidebarExtend } = React.useContext(sidebarContext);
   const value = React.useContext(sidebarContext);
-  const [appointments, setAppointments] = React.useState([]);
+  const [appointments, setAppointments] = React.useState([[]]);
   let token = localStorage.getItem("token");
   const login = React.useContext(loginContext);
   const navigate = useNavigate();
 
   const [page, setPage] = React.useState(1);
-  // let appointmentsPages = useRef([]);
 
-  // function sliceIntoChunks(arr, chunkSize) {
-  //   const res = [];
-  //   for (let i = 0; i < arr.length; i += chunkSize) {
-  //     const chunk = arr.slice(i, i + chunkSize);
-  //     res.push(chunk);
-  //   }
-  //   return res;
-  // }
+  function sliceIntoChunks(arr, chunkSize) {
+    const res = [];
+    for (let i = 0; i < arr.length; i += chunkSize) {
+      const chunk = arr.slice(i, i + chunkSize);
+      res.push(chunk);
+    }
+    return res;
+  }
 
   const handleCompleteApp = (id) => {
     console.log(id);
@@ -75,14 +74,12 @@ const PrevAppointments = () => {
           },
         })
         .then((res) => {
-          // console.log([...appointments, ...res.data]);
           console.log(res.data);
           let finishedApp = res.data.filter((data) => {
             return data.status === "Finished";
           });
-          setAppointments(finishedApp);
-          // appointmentsPages.current = sliceIntoChunks(appointments, 10);
-          // console.log("Here is appoinments array");
+          setAppointments(sliceIntoChunks(finishedApp, 10));
+
           console.log(appointments);
         })
         .catch((err) => {
@@ -97,14 +94,11 @@ const PrevAppointments = () => {
           },
         })
         .then((res) => {
-          // console.log([...appointments, ...res.data]);
           console.log(res.data);
           let finishedApp = res.data.filter((data) => {
             return data.status === "Finished";
           });
-          setAppointments(finishedApp);
-          // appointmentsPages.current = sliceIntoChunks(appointments, 10);
-          // console.log("Here is appoinments array");
+          setAppointments(sliceIntoChunks(finishedApp, 10));
           console.log(appointments);
         })
         .catch((err) => {
@@ -112,11 +106,6 @@ const PrevAppointments = () => {
         });
     }
   }, []);
-
-  // useMemo(() => {
-  //   appointmentsPages.current = sliceIntoChunks(appointments, 10);
-  //   console.log(appointmentsPages.current);
-  // }, [appointments, appointmentsPages]);
 
   React.useEffect(() => {
     if (login.state.isLoggged === false) navigate("/login");
@@ -205,18 +194,19 @@ const PrevAppointments = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {appointments === null || appointments.length === 0 ? (
+                    {appointments[page - 1] === null ||
+                    appointments.length === 0 ? (
                       <tr key="9999">
                         <td
                           className="text-center font-semibold text-lg"
                           align="center"
-                          colspan="4"
+                          colSpan="4"
                         >
                           There are no Finished Appointments
                         </td>
                       </tr>
                     ) : (
-                      appointments.map((appointment, index) => {
+                      appointments[page - 1].map((appointment, index) => {
                         return (
                           <tr key={index}>
                             {/* <td className="px-6 py-4 text-start text-sm font-medium text-gray-800 whitespace-nowrap">
@@ -304,25 +294,25 @@ const PrevAppointments = () => {
                   </tbody>
                 </table>
               </div>
-              {/* <div className="flex justify-center my-4">
-                  {appointmentsPages.current.map((pg, index) => {
-                    return (
-                      <button
-                        key={index}
-                        onClick={() => setPage(index + 1)}
-                        className="w-10 h-10 p-2 text-center text-black border rounded  bg-BazRed hover:bg-gray-300 text-lg mx-1"
-                      >
-                        {index + 1}
-                      </button>
-                    );
-                  })}
-                  <button
+              <div className="flex justify-center my-4">
+                {appointments.map((pg, index) => {
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => setPage(index + 1)}
+                      className="flex justify-center items-center w-10 h-10 p-2 text-center text-black border rounded  bg-BazRed hover:bg-gray-300 text-lg mx-1"
+                    >
+                      {index + 1}
+                    </button>
+                  );
+                })}
+                {/* <button
                     // onClick={() => {if(appoinmentsPages.length<index) setPage(index + 1)}}
                     className="w-10 h-10 p-2 text-center text-white bg-BazRed hover:bg-red-700 text-lg mx-1"
                   >
                     {">"}
-                  </button>
-                </div> */}
+                  </button> */}
+              </div>
             </div>
           </div>
         </div>
