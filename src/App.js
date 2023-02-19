@@ -18,13 +18,16 @@ function App() {
   const [isLoggged, setIsLogged] = React.useState(
     localStorage.getItem("token") ? true : false
   );
+  const [accountType, setAccountType] = React.useState("admin");
   return (
     <loginContext.Provider
       value={{
         state: {
           isLoggged: isLoggged,
+          accountType: accountType,
         },
         setIsLogged: setIsLogged,
+        setAccountType: setAccountType,
       }}
     >
       <sidebarContext.Provider

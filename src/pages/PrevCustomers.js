@@ -30,97 +30,189 @@ const PrevCustomers = () => {
 
   const handleCustomerActive = (id) => {
     console.log(id);
-
-    axiosInstance
-      .patch(
-        `/admin/customer/${id}`,
-        { active: true },
-        {
+    if (login.state.accountType === "admin") {
+      axiosInstance
+        .patch(
+          `/admin/customer/${id}`,
+          { active: true },
+          {
+            headers: {
+              Authorization: token,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      axiosInstance
+        .get(`/admin/customer`, {
           headers: {
             Authorization: token,
-            "Content-Type": "application/json",
           },
-        }
-      )
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    axiosInstance
-      .get(`/admin/customer`, {
-        headers: {
-          Authorization: token,
-        },
-      })
-      .then((res) => {
-        // console.log([...appointments, ...res.data]);
-        console.log(res.data);
-        setCustomers(res.data);
-        // appointmentsPages.current = sliceIntoChunks(appointments, 10);
-        // console.log("Here is appoinments array");
-        console.log(customers);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+        })
+        .then((res) => {
+          // console.log([...appointments, ...res.data]);
+          console.log(res.data);
+          setCustomers(res.data);
+          // appointmentsPages.current = sliceIntoChunks(appointments, 10);
+          // console.log("Here is appoinments array");
+          console.log(customers);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    if (login.state.accountType === "manager") {
+      axiosInstance
+        .patch(
+          `/manager/customer/${id}`,
+          { active: true },
+          {
+            headers: {
+              Authorization: token,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      axiosInstance
+        .get(`/manager/customer`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          // console.log([...appointments, ...res.data]);
+          console.log(res.data);
+          setCustomers(res.data);
+          // appointmentsPages.current = sliceIntoChunks(appointments, 10);
+          // console.log("Here is appoinments array");
+          console.log(customers);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const handleDeleteCustomerAccount = (id) => {
     console.log(id);
-
-    axiosInstance
-      .delete(`/admin/customer/${id}`, {
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    axiosInstance
-      .get(`/admin/customer`, {
-        headers: {
-          Authorization: token,
-        },
-      })
-      .then((res) => {
-        // console.log([...appointments, ...res.data]);
-        console.log(res.data);
-        setCustomers(res.data);
-        // appointmentsPages.current = sliceIntoChunks(appointments, 10);
-        // console.log("Here is appoinments array");
-        console.log(customers);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (login.state.accountType === "admin") {
+      axiosInstance
+        .delete(`/admin/customer/${id}`, {
+          headers: {
+            Authorization: token,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      axiosInstance
+        .get(`/admin/customer`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          // console.log([...appointments, ...res.data]);
+          console.log(res.data);
+          setCustomers(res.data);
+          // appointmentsPages.current = sliceIntoChunks(appointments, 10);
+          // console.log("Here is appoinments array");
+          console.log(customers);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    if (login.state.accountType === "manager") {
+      axiosInstance
+        .delete(`/manager/customer/${id}`, {
+          headers: {
+            Authorization: token,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      axiosInstance
+        .get(`/manager/customer`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          // console.log([...appointments, ...res.data]);
+          console.log(res.data);
+          setCustomers(res.data);
+          // appointmentsPages.current = sliceIntoChunks(appointments, 10);
+          // console.log("Here is appoinments array");
+          console.log(customers);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   useEffect(() => {
-    axiosInstance
-      .get(`/admin/customer`, {
-        headers: {
-          Authorization: token,
-        },
-      })
-      .then((res) => {
-        console.log([...customers, ...res.data]);
-        let NonActiveCustomers = res.data.filter((data) => {
-          return !data.active;
+    if (login.state.accountType === "admin") {
+      axiosInstance
+        .get(`/admin/customer`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          console.log([...customers, ...res.data]);
+          let NonActiveCustomers = res.data.filter((data) => {
+            return !data.active;
+          });
+          console.log(NonActiveCustomers);
+          setCustomers(NonActiveCustomers);
+          console.log(customers);
+        })
+        .catch((err) => {
+          console.log(err);
         });
-        console.log(NonActiveCustomers);
-        setCustomers(NonActiveCustomers);
-        console.log(customers);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    }
+    if (login.state.accountType === "manager") {
+      axiosInstance
+        .get(`/manager/customer`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          console.log([...customers, ...res.data]);
+          let NonActiveCustomers = res.data.filter((data) => {
+            return !data.active;
+          });
+          console.log(NonActiveCustomers);
+          setCustomers(NonActiveCustomers);
+          console.log(customers);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, []);
   //   useMemo(() => {
   //     customersPages.current = sliceIntoChunks(customers, 10);

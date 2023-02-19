@@ -19,68 +19,122 @@ const Customers = () => {
   // const [pg, setPg] = React.useState(1);
   // let customersPages = useRef([]);
 
-  function sliceIntoChunks(arr, chunkSize) {
-    const res = [];
-    for (let i = 0; i < arr.length; i += chunkSize) {
-      const chunk = arr.slice(i, i + chunkSize);
-      res.push(chunk);
-    }
-    return res;
-  }
+  // function sliceIntoChunks(arr, chunkSize) {
+  //   const res = [];
+  //   for (let i = 0; i < arr.length; i += chunkSize) {
+  //     const chunk = arr.slice(i, i + chunkSize);
+  //     res.push(chunk);
+  //   }
+  //   return res;
+  // }
 
   const handleCustomerActive = (id) => {
     console.log(id);
-
-    axiosInstance
-      .patch(
-        `/admin/customer/${id}`,
-        { active: false },
-        {
+    if (login.state.accountType === "admin") {
+      axiosInstance
+        .patch(
+          `/admin/customer/${id}`,
+          { active: false },
+          {
+            headers: {
+              Authorization: token,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      axiosInstance
+        .get(`/admin/customer`, {
           headers: {
             Authorization: token,
-            "Content-Type": "application/json",
           },
-        }
-      )
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    axiosInstance
-      .get(`/admin/customer`, {
-        headers: {
-          Authorization: token,
-        },
-      })
-      .then((res) => {
-        // console.log([...appointments, ...res.data]);
-        console.log(res.data);
-        setCustomers(res.data);
-        // appointmentsPages.current = sliceIntoChunks(appointments, 10);
-        // console.log("Here is appoinments array");
-        console.log(customers);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+        })
+        .then((res) => {
+          // console.log([...appointments, ...res.data]);
+          console.log(res.data);
+          setCustomers(res.data);
+          // appointmentsPages.current = sliceIntoChunks(appointments, 10);
+          // console.log("Here is appoinments array");
+          console.log(customers);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    if (login.state.accountType === "manager") {
+      axiosInstance
+        .patch(
+          `/manager/customer/${id}`,
+          { active: false },
+          {
+            headers: {
+              Authorization: token,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      axiosInstance
+        .get(`/manager/customer`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          // console.log([...appointments, ...res.data]);
+          console.log(res.data);
+          setCustomers(res.data);
+          // appointmentsPages.current = sliceIntoChunks(appointments, 10);
+          // console.log("Here is appoinments array");
+          console.log(customers);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   useEffect(() => {
-    axiosInstance
-      .get(`/admin/customer`, {
-        headers: {
-          Authorization: token,
-        },
-      })
-      .then((res) => {
-        console.log([...customers, ...res.data]);
-        setCustomers(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (login.state.accountType === "admin") {
+      axiosInstance
+        .get(`/admin/customer`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          console.log([...customers, ...res.data]);
+          setCustomers(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    if (login.state.accountType === "manager") {
+      axiosInstance
+        .get(`/admin/customer`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          console.log([...customers, ...res.data]);
+          setCustomers(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, []);
   //   useMemo(() => {
   //     customersPages.current = sliceIntoChunks(customers, 10);

@@ -22,41 +22,80 @@ const Home = () => {
   const [finishedAppointments, setFinishedAppointments] = React.useState(0);
   const [todayAppointment, setTodayAppointment] = React.useState(0);
   useEffect(() => {
-    axiosInstance
-      .get(`/admin/customer`, {
-        headers: {
-          Authorization: token,
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        setCustomers(res.data.length);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    axiosInstance
-      .get(`/admin/appointment`, {
-        headers: {
-          Authorization: token,
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        let wApp = res.data.filter((data) => {
-          return data.status === "Waiting";
+    if (login.state.accountType === "admin") {
+      axiosInstance
+        .get(`/admin/customer`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          setCustomers(res.data.length);
+        })
+        .catch((err) => {
+          console.log(err);
         });
-        setWaitingAppointments(wApp.length);
-        let fApp = res.data.filter((data) => {
-          return data.status === "Finished";
-        });
-        setFinishedAppointments(fApp.length);
+      axiosInstance
+        .get(`/admin/appointment`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          let wApp = res.data.filter((data) => {
+            return data.status === "Waiting";
+          });
+          setWaitingAppointments(wApp.length);
+          let fApp = res.data.filter((data) => {
+            return data.status === "Finished";
+          });
+          setFinishedAppointments(fApp.length);
 
-        setTodayAppointment(res.data.length);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+          setTodayAppointment(res.data.length);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    if (login.state.accountType === "manager") {
+      axiosInstance
+        .get(`/manager/customer`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          setCustomers(res.data.length);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      axiosInstance
+        .get(`/manager/appointment`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          let wApp = res.data.filter((data) => {
+            return data.status === "Waiting";
+          });
+          setWaitingAppointments(wApp.length);
+          let fApp = res.data.filter((data) => {
+            return data.status === "Finished";
+          });
+          setFinishedAppointments(fApp.length);
+
+          setTodayAppointment(res.data.length);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, []);
   if (login.state.isLoggged === true) {
     return (

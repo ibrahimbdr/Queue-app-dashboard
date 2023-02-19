@@ -29,45 +29,88 @@ const PrevAppointments = () => {
 
   const handleCompleteApp = (id) => {
     console.log(id);
-
-    axiosInstance
-      .patch(
-        `/admin/appointment/${id}`,
-        JSON.stringify({ status: "Finished" }),
-        {
+    if (login.state.accountType === "admin") {
+      axiosInstance
+        .patch(
+          `/admin/appointment/${id}`,
+          JSON.stringify({ status: "Finished" }),
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    if (login.state.accountType === "manager") {
+      axiosInstance
+        .patch(
+          `/manager/appointment/${id}`,
+          JSON.stringify({ status: "Finished" }),
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+  useEffect(() => {
+    if (login.state.accountType === "admin") {
+      axiosInstance
+        .get(`/admin/appointment`, {
           headers: {
             Authorization: token,
           },
-        }
-      )
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  useEffect(() => {
-    axiosInstance
-      .get(`/admin/appointment`, {
-        headers: {
-          Authorization: token,
-        },
-      })
-      .then((res) => {
-        // console.log([...appointments, ...res.data]);
-        console.log(res.data);
-        let finishedApp = res.data.filter((data) => {
-          return data.status === "Finished";
+        })
+        .then((res) => {
+          // console.log([...appointments, ...res.data]);
+          console.log(res.data);
+          let finishedApp = res.data.filter((data) => {
+            return data.status === "Finished";
+          });
+          setAppointments(finishedApp);
+          // appointmentsPages.current = sliceIntoChunks(appointments, 10);
+          // console.log("Here is appoinments array");
+          console.log(appointments);
+        })
+        .catch((err) => {
+          console.log(err);
         });
-        setAppointments(finishedApp);
-        // appointmentsPages.current = sliceIntoChunks(appointments, 10);
-        // console.log("Here is appoinments array");
-        console.log(appointments);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    }
+    if (login.state.accountType === "manager") {
+      axiosInstance
+        .get(`/manager/appointment`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          // console.log([...appointments, ...res.data]);
+          console.log(res.data);
+          let finishedApp = res.data.filter((data) => {
+            return data.status === "Finished";
+          });
+          setAppointments(finishedApp);
+          // appointmentsPages.current = sliceIntoChunks(appointments, 10);
+          // console.log("Here is appoinments array");
+          console.log(appointments);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, []);
 
   // useMemo(() => {

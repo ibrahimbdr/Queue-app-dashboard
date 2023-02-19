@@ -32,41 +32,78 @@ const Appointments = () => {
 
   const handleAppoinmentStatusF = (id) => {
     console.log(id);
-
-    axiosInstance
-      .patch(
-        `/admin/appointment/${id}`,
-        { status: "Finished" },
-        {
+    if (login.state.accountType === "admin") {
+      axiosInstance
+        .patch(
+          `/admin/appointment/${id}`,
+          { status: "Finished" },
+          {
+            headers: {
+              Authorization: token,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      axiosInstance
+        .get(`/admin/appointment`, {
           headers: {
             Authorization: token,
-            "Content-Type": "application/json",
           },
-        }
-      )
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    axiosInstance
-      .get(`/admin/appointment`, {
-        headers: {
-          Authorization: token,
-        },
-      })
-      .then((res) => {
-        // console.log([...appointments, ...res.data]);
-        console.log(res.data);
-        setAppointments(res.data);
-        // appointmentsPages.current = sliceIntoChunks(appointments, 10);
-        // console.log("Here is appoinments array");
-        console.log(appointments);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+        })
+        .then((res) => {
+          // console.log([...appointments, ...res.data]);
+          console.log(res.data);
+          setAppointments(res.data);
+          // appointmentsPages.current = sliceIntoChunks(appointments, 10);
+          // console.log("Here is appoinments array");
+          console.log(appointments);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    if (login.state.accountType === "manager") {
+      axiosInstance
+        .patch(
+          `/manager/appointment/${id}`,
+          { status: "Finished" },
+          {
+            headers: {
+              Authorization: token,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      axiosInstance
+        .get(`/manager/appointment`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          // console.log([...appointments, ...res.data]);
+          console.log(res.data);
+          setAppointments(res.data);
+          // appointmentsPages.current = sliceIntoChunks(appointments, 10);
+          // console.log("Here is appoinments array");
+          console.log(appointments);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const handleAppoinmentStatusW = (id) => {
@@ -109,24 +146,46 @@ const Appointments = () => {
         console.log(err);
       });
   };
+
   useEffect(() => {
-    axiosInstance
-      .get(`/admin/appointment`, {
-        headers: {
-          Authorization: token,
-        },
-      })
-      .then((res) => {
-        // console.log([...appointments, ...res.data]);
-        console.log(res.data);
-        setAppointments(res.data);
-        // appointmentsPages.current = sliceIntoChunks(appointments, 10);
-        // console.log("Here is appoinments array");
-        console.log(appointments);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (login.state.accountType === "admin") {
+      axiosInstance
+        .get(`/admin/appointment`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          // console.log([...appointments, ...res.data]);
+          console.log(res.data);
+          setAppointments(res.data);
+          // appointmentsPages.current = sliceIntoChunks(appointments, 10);
+          // console.log("Here is appoinments array");
+          console.log(appointments);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    if (login.state.accountType === "manager") {
+      axiosInstance
+        .get(`/manager/appointment`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          // console.log([...appointments, ...res.data]);
+          console.log(res.data);
+          setAppointments(res.data);
+          // appointmentsPages.current = sliceIntoChunks(appointments, 10);
+          // console.log("Here is appoinments array");
+          console.log(appointments);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, []);
 
   // useMemo(() => {

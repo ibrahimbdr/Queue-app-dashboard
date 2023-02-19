@@ -7,13 +7,14 @@ import Sidebar from "../components/Sidebar";
 import sidebarContext from "../context/SidebarContext";
 import { BiDownArrow, BiUpArrow } from "react-icons/bi";
 import { MdControlPoint, MdLightMode, MdNightlight } from "react-icons/md";
+import loginContext from "../context/LoginContext";
 
 const Settings = () => {
   const { state, setSidebarExtend, setColorMode } =
     React.useContext(sidebarContext);
   const [mangerAccountDiv, setManagerAccountDiv] = React.useState(false);
   const [customerAccountDiv, setCustomerAccountDiv] = React.useState(false);
-
+  const login = React.useContext(loginContext);
   const [phoneArr, setPhoneArr] = React.useState([]);
   const [nameArr, setNameArr] = React.useState([]);
   React.useEffect(() => {
@@ -41,145 +42,159 @@ const Settings = () => {
         <h1 className="text-2xl font-bold mb-14 p-6">Settings</h1>
         <div className="w-full p-2">
           <h2 className="text-2xl font-semibold">Accounts</h2>
-          <div
-            className="w-full py-3 bg-gray-50 flex justify-between px-2"
-            onClick={() => setManagerAccountDiv(!mangerAccountDiv)}
-          >
-            <h2 className="flex items-center cursor-pointer text-md font-medium ">
-              <MdControlPoint className="mr-1" /> Add a new manager Account
-            </h2>
-            <button>
-              {mangerAccountDiv ? <BiDownArrow /> : <BiUpArrow />}
-            </button>
-          </div>
-
-          {mangerAccountDiv && (
-            <div className="animate-drop-down border-t">
-              <Formik
-                initialValues={{
-                  username: "",
-                  password: "",
-                  c_password: "",
-                  email: "",
-                  phone: "",
-                }}
-                validationSchema={Yup.object({
-                  username: Yup.string().required("Required"),
-                  password: Yup.string().required("Required"),
-                  c_password: Yup.string().required("Required"),
-                  email: Yup.string().email().required("Required"),
-                  phone: Yup.string().required("Required"),
-                })}
-                onSubmit={(values, { setSubmitting }) => {
-                  setSubmitting(false);
-                  console.log(JSON.stringify(values));
-                  axiosInstance
-                    .post(
-                      "/admin/manager/",
-
-                      values,
-                      {
-                        headers: {
-                          "Content-Type": "application/json",
-                        },
-                      }
-                    )
-                    .then((res) => {})
-                    .catch((err) => {
-                      console.log(err);
-                    });
-                }}
+          {login.state.accountType === "admin" && (
+            <>
+              <div
+                className="w-full py-3 bg-gray-50 flex justify-between px-2"
+                onClick={() => setManagerAccountDiv(!mangerAccountDiv)}
               >
-                {({ isSubmitting }) => (
-                  <Form>
-                    <div className="p-4 shadow bg-gray-50 rounded">
-                      <div className="my-4 w-full">
-                        <label htmlFor="username" className="block">
-                          Username
-                        </label>
-                        <Field
-                          type="text"
-                          name="username"
-                          className="h-10 rounded w-full p-1"
-                        />
-                        <ErrorMessage name="username">
-                          {(msg) => (
-                            <div className="text-sm text-red-500">{msg}</div>
-                          )}
-                        </ErrorMessage>
-                      </div>
-                      <div className="my-4 w-full">
-                        <label htmlFor="password" className="block">
-                          Password
-                        </label>
-                        <Field
-                          type="password"
-                          name="password"
-                          className="h-10 rounded w-full p-1"
-                        />
-                        <ErrorMessage name="password">
-                          {(msg) => (
-                            <div className="text-sm text-red-500">{msg}</div>
-                          )}
-                        </ErrorMessage>
-                      </div>
-                      <div className="my-4 w-full">
-                        <label htmlFor="c_password" className="block">
-                          Confirm Password
-                        </label>
-                        <Field
-                          type="password"
-                          name="c_password"
-                          className="h-10 rounded w-full p-1"
-                        />
-                        <ErrorMessage name="c_password">
-                          {(msg) => (
-                            <div className="text-sm text-red-500">{msg}</div>
-                          )}
-                        </ErrorMessage>
-                      </div>
-                      <div className="my-4 w-full">
-                        <label htmlFor="email" className="block">
-                          Email Address
-                        </label>
-                        <Field
-                          type="email"
-                          name="email"
-                          className="h-10 rounded w-full p-1"
-                        />
-                        <ErrorMessage name="email">
-                          {(msg) => (
-                            <div className="text-sm text-red-500">{msg}</div>
-                          )}
-                        </ErrorMessage>
-                      </div>
-                      <div className="my-4 w-full">
-                        <label htmlFor="phone" className="block">
-                          Password
-                        </label>
-                        <Field
-                          type="text"
-                          name="phone"
-                          className="h-10 rounded w-full p-1"
-                        />
-                        <ErrorMessage name="phone">
-                          {(msg) => (
-                            <div className="text-sm text-red-500">{msg}</div>
-                          )}
-                        </ErrorMessage>
-                      </div>
-                      <button
-                        type="submit"
-                        className="text-xl mt-3 border border-gray-800 hover:bg-gray-800 hover:text-white mx-5 w-32 text-center rounded  py-2 transition-all"
-                        disabled={isSubmitting}
-                      >
-                        Add
-                      </button>
-                    </div>
-                  </Form>
-                )}
-              </Formik>
-            </div>
+                <h2 className="flex items-center cursor-pointer text-md font-medium ">
+                  <MdControlPoint className="mr-1" /> Add a new manager Account
+                </h2>
+                <button>
+                  {mangerAccountDiv ? <BiDownArrow /> : <BiUpArrow />}
+                </button>
+              </div>
+
+              {mangerAccountDiv && (
+                <div className="animate-drop-down border-t">
+                  <Formik
+                    initialValues={{
+                      username: "",
+                      password: "",
+                      c_password: "",
+                      email: "",
+                      phone: "",
+                    }}
+                    validationSchema={Yup.object({
+                      username: Yup.string().required("Required"),
+                      password: Yup.string().required("Required"),
+                      c_password: Yup.string().required("Required"),
+                      email: Yup.string().email().required("Required"),
+                      phone: Yup.string().required("Required"),
+                    })}
+                    onSubmit={(values, { setSubmitting }) => {
+                      setSubmitting(false);
+                      console.log(JSON.stringify(values));
+                      axiosInstance
+                        .post(
+                          "/admin/manager/",
+
+                          values,
+                          {
+                            headers: {
+                              "Content-Type": "application/json",
+                            },
+                          }
+                        )
+                        .then((res) => {})
+                        .catch((err) => {
+                          console.log(err);
+                        });
+                    }}
+                  >
+                    {({ isSubmitting }) => (
+                      <Form>
+                        <div className="p-4 shadow bg-gray-50 rounded">
+                          <div className="my-4 w-full">
+                            <label htmlFor="username" className="block">
+                              Username
+                            </label>
+                            <Field
+                              type="text"
+                              name="username"
+                              className="h-10 rounded w-full p-1"
+                            />
+                            <ErrorMessage name="username">
+                              {(msg) => (
+                                <div className="text-sm text-red-500">
+                                  {msg}
+                                </div>
+                              )}
+                            </ErrorMessage>
+                          </div>
+                          <div className="my-4 w-full">
+                            <label htmlFor="password" className="block">
+                              Password
+                            </label>
+                            <Field
+                              type="password"
+                              name="password"
+                              className="h-10 rounded w-full p-1"
+                            />
+                            <ErrorMessage name="password">
+                              {(msg) => (
+                                <div className="text-sm text-red-500">
+                                  {msg}
+                                </div>
+                              )}
+                            </ErrorMessage>
+                          </div>
+                          <div className="my-4 w-full">
+                            <label htmlFor="c_password" className="block">
+                              Confirm Password
+                            </label>
+                            <Field
+                              type="password"
+                              name="c_password"
+                              className="h-10 rounded w-full p-1"
+                            />
+                            <ErrorMessage name="c_password">
+                              {(msg) => (
+                                <div className="text-sm text-red-500">
+                                  {msg}
+                                </div>
+                              )}
+                            </ErrorMessage>
+                          </div>
+                          <div className="my-4 w-full">
+                            <label htmlFor="email" className="block">
+                              Email Address
+                            </label>
+                            <Field
+                              type="email"
+                              name="email"
+                              className="h-10 rounded w-full p-1"
+                            />
+                            <ErrorMessage name="email">
+                              {(msg) => (
+                                <div className="text-sm text-red-500">
+                                  {msg}
+                                </div>
+                              )}
+                            </ErrorMessage>
+                          </div>
+                          <div className="my-4 w-full">
+                            <label htmlFor="phone" className="block">
+                              Phone Number
+                            </label>
+                            <Field
+                              type="text"
+                              name="phone"
+                              className="h-10 rounded w-full p-1"
+                            />
+                            <ErrorMessage name="phone">
+                              {(msg) => (
+                                <div className="text-sm text-red-500">
+                                  {msg}
+                                </div>
+                              )}
+                            </ErrorMessage>
+                          </div>
+                          <button
+                            type="submit"
+                            className="text-xl mt-3 border border-gray-800 hover:bg-gray-800 hover:text-white mx-5 w-32 text-center rounded  py-2 transition-all"
+                            disabled={isSubmitting}
+                          >
+                            Add
+                          </button>
+                        </div>
+                      </Form>
+                    )}
+                  </Formik>
+                </div>
+              )}
+            </>
           )}
           <div
             className="w-full py-3 bg-gray-50 flex justify-between px-2"
@@ -229,9 +244,9 @@ const Settings = () => {
                     });
                   axiosInstance
                     .post(
-                      "/customer/login",
+                      "/customer/",
 
-                      JSON.stringify({ phone: values.phone }),
+                      values,
                       {
                         headers: {
                           "Content-Type": "application/json",

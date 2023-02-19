@@ -8,7 +8,6 @@ import loginContext from "../context/LoginContext";
 const Login = () => {
   const navigate = useNavigate();
   const login = React.useContext(loginContext);
-  const [accountType, setAccountType] = React.useState("admin");
   React.useEffect(() => {
     if (login.state.isLoggged === true) navigate("/");
   }, []);
@@ -16,25 +15,29 @@ const Login = () => {
     return (
       <div className="w-screen h-screen flex flex-col justify-center items-center">
         <h1 className="text-4xl mb-3 font-medium">Login</h1>
-        <div className="p-1 rounded-full bg-gray-500 my-2">
+        <div className="p-1 rounded-full bg-gray-300 my-2">
           <button
-            onClick={() => setAccountType("admin")}
+            onClick={() => login.setAccountType("admin")}
             className={`${
-              accountType === "admin" ? "bg-gray-500" : "bg-gray-100"
+              login.state.accountType === "admin"
+                ? "bg-gray-100 shadow"
+                : "bg-gray-300 shadow-inner"
             } rounded-l-full text-gray-900 p-1 w-32`}
           >
             Admin
           </button>
           <button
-            onClick={() => setAccountType("manager")}
+            onClick={() => login.setAccountType("manager")}
             className={`${
-              accountType === "manager" ? "bg-gray-500" : "bg-gray-100"
+              login.state.accountType === "manager"
+                ? "bg-gray-100 shadow"
+                : "bg-gray-300 shadow-inner"
             } rounded-r-full text-gray-900 p-1 w-32`}
           >
             Manager
           </button>
         </div>
-        {accountType === "admin" && (
+        {login.state.accountType === "admin" && (
           <Formik
             initialValues={{ username: "", password: "" }}
             validationSchema={Yup.object({
@@ -111,7 +114,7 @@ const Login = () => {
             )}
           </Formik>
         )}
-        {accountType === "manager" && (
+        {login.state.accountType === "manager" && (
           <Formik
             initialValues={{ username: "", password: "" }}
             validationSchema={Yup.object({
@@ -125,7 +128,7 @@ const Login = () => {
                 .post(
                   "/manager/login/",
 
-                  JSON.stringify(values),
+                  values,
                   {
                     headers: {
                       "Content-Type": "application/json",
