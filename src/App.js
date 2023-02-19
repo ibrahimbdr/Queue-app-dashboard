@@ -14,7 +14,7 @@ import Settings from "./pages/Settings";
 
 function App() {
   const [sidebarExtend, setSidebarExtend] = React.useState(true);
-  const [colorMode, setColorMode] = React.useState("dark");
+  const [colorMode, setColorMode] = React.useState("light");
   const [isLoggged, setIsLogged] = React.useState(
     localStorage.getItem("token") ? true : false
   );
