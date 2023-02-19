@@ -3,7 +3,12 @@ import { MdOutlineDashboardCustomize, MdLogout } from "react-icons/md";
 import { GoListOrdered } from "react-icons/go";
 import { GrHistory } from "react-icons/gr";
 import { FaUsers, FaUsersSlash } from "react-icons/fa";
-import { BsArrowRight, BsArrowLeft, BsFillGearFill } from "react-icons/bs";
+import {
+  BsArrowRight,
+  BsArrowLeft,
+  BsFillGearFill,
+  BsClockHistory,
+} from "react-icons/bs";
 import { Link } from "react-router-dom";
 import sidebarContext from "../context/SidebarContext";
 import loginContext from "../context/LoginContext";
@@ -20,9 +25,11 @@ const Sidebar = () => {
   };
   return (
     <div
-      className={`self-start fixed top-0 h-screen hidden md:block ${
-        state.sidebarExtend ? "w-[200px]" : "w-fit"
-      } bg-gray-50 text-black font-semibold`}
+      className={`self-start shadow-lg fixed top-0 h-screen hidden md:block ${
+        state.sidebarExtend ? "w-[220px]" : "w-fit"
+      } ${state.colorMode === "dark" && "bg-gray-900 text-cyan-700"} ${
+        state.colorMode === "light" && "bg-gray-50 text-black"
+      } font-semibold`}
     >
       <div
         className={` p-3 mb-6 flex ${
@@ -91,10 +98,10 @@ const Sidebar = () => {
           >
             {state.sidebarExtend ? (
               <>
-                <GrHistory className="mr-1" /> Queue History
+                <BsClockHistory className="mr-1" /> Queue History
               </>
             ) : (
-              <GrHistory size={40} />
+              <BsClockHistory size={40} />
             )}
           </li>
         </Link>

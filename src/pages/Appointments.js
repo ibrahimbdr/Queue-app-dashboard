@@ -204,8 +204,15 @@ const Appointments = () => {
           <div className="overflow-x-auto">
             <div className="p-1.5 w-full inline-block align-middle">
               <div className="overflow-hidden border rounded-lg">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
+                <table
+                  className={`min-w-full divide-y divide-gray-200
+                  }`}
+                >
+                  <thead
+                    className={`${
+                      state.colorMode === "dark" ? "bg-gray-900" : "bg-gray-50"
+                    }`}
+                  >
                     <tr>
                       {/* <th
                           scope="col"
@@ -215,37 +222,61 @@ const Appointments = () => {
                         </th> */}
                       <th
                         scope="col"
-                        className="px-2 py-3 text-start text-xs font-bold text-gray-500 uppercase "
+                        className={`px-2 py-3 text-start text-xs font-bold ${
+                          state.colorMode === "dark"
+                            ? "text-cyan-700"
+                            : "text-gray-500"
+                        } uppercase `}
                       >
                         Queue number
                       </th>
                       <th
                         scope="col"
-                        className="px-2 py-3 text-start text-xs font-bold text-gray-500 uppercase "
+                        className={`px-2 py-3 text-start text-xs font-bold ${
+                          state.colorMode === "dark"
+                            ? "text-cyan-700"
+                            : "text-gray-500"
+                        } uppercase `}
                       >
                         Customer
                       </th>
                       <th
                         scope="col"
-                        className="hidden md:table-cell px-2 py-3 text-start text-xs font-bold text-gray-500 uppercase "
+                        className={`hidden md:table-cell px-2 py-3 text-start text-xs font-bold ${
+                          state.colorMode === "dark"
+                            ? "text-cyan-700"
+                            : "text-gray-500"
+                        } uppercase `}
                       >
                         Reservation Date
                       </th>
                       <th
                         scope="col"
-                        className="px-2 py-3 text-start text-xs font-bold text-gray-500 uppercase "
+                        className={`px-2 py-3 text-start text-xs font-bold ${
+                          state.colorMode === "dark"
+                            ? "text-cyan-700"
+                            : "text-gray-500"
+                        } uppercase `}
                       >
                         Reservation Time
                       </th>
                       <th
                         scope="col"
-                        className="px-2 py-3 text-start text-xs font-bold text-gray-500 uppercase "
+                        className={`px-2 py-3 text-start text-xs font-bold ${
+                          state.colorMode === "dark"
+                            ? "text-cyan-700"
+                            : "text-gray-500"
+                        } uppercase `}
                       >
                         Status
                       </th>
                       <th
                         scope="col"
-                        className="px-2 py-3 text-start text-xs font-bold text-gray-500 uppercase "
+                        className={`px-2 py-3 text-start text-xs font-bold ${
+                          state.colorMode === "dark"
+                            ? "text-cyan-700"
+                            : "text-gray-500"
+                        } uppercase `}
                       >
                         Action
                       </th>
@@ -266,27 +297,57 @@ const Appointments = () => {
                       appointments.map((appointment, index) => {
                         return (
                           <tr key={index}>
-                            {/* <td className="px-6 py-4 text-start text-sm font-medium text-gray-800 whitespace-nowrap">
+                            {/* <td className="px-6 py-4 text-start text-sm font-medium text-gray-400 whitespace-nowrap">
                               <span>{"0".repeat(index.length)}</span>
                               {index + 1}
                             </td> */}
-                            <td className="px-2 py-4 text-start text-sm text-gray-800 whitespace-nowrap">
+                            <td
+                              className={`px-2 py-4 text-start text-sm ${
+                                state.colorMode === "dark"
+                                  ? "text-gray-400"
+                                  : "text-gray-800"
+                              } whitespace-nowrap`}
+                            >
                               {appointment.number}
                             </td>
-                            <td className="px-2 py-4 text-start text-sm text-gray-800 whitespace-nowrap">
+                            <td
+                              className={`px-2 py-4 text-start text-sm ${
+                                state.colorMode === "dark"
+                                  ? "text-gray-400"
+                                  : "text-gray-800"
+                              } whitespace-nowrap`}
+                            >
                               {appointment.customer.name}
                             </td>
-                            <td className="hidden md:table-cell px-2 py-4 text-start text-sm text-gray-800 whitespace-nowrap">
+                            <td
+                              className={`hidden md:table-cell px-2 py-4 text-start text-sm ${
+                                state.colorMode === "dark"
+                                  ? "text-gray-400"
+                                  : "text-gray-800"
+                              } whitespace-nowrap`}
+                            >
                               {new Intl.DateTimeFormat(["ban", "id"]).format(
                                 new Date(appointment.createdAt)
                               )}
                             </td>
-                            <td className="px-2 py-4 text-start text-sm text-gray-800 whitespace-nowrap">
+                            <td
+                              className={`px-2 py-4 text-start text-sm ${
+                                state.colorMode === "dark"
+                                  ? "text-gray-400"
+                                  : "text-gray-800"
+                              } whitespace-nowrap`}
+                            >
                               {new Intl.DateTimeFormat("en-GB", {
                                 timeStyle: "short",
                               }).format(new Date(appointment.createdAt))}
                             </td>
-                            <td className="px-2 py-4 text-start text-sm font-medium rounded whitespace-nowrap">
+                            <td
+                              className={`px-2 py-4 text-start text-sm ${
+                                state.colorMode === "dark"
+                                  ? "text-gray-400"
+                                  : "text-gray-800"
+                              } whitespace-nowrap`}
+                            >
                               {
                                 <p
                                   className={`${

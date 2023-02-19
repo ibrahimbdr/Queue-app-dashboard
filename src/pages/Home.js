@@ -99,26 +99,50 @@ const Home = () => {
   }, []);
   if (login.state.isLoggged === true) {
     return (
-      <div className="grid grid-cols-1 gap-3 w-full h-full overflow-auto mt-8">
-        <div className="mx-auto flex flex-col flex-wrap justify-center items-center text-lg font-bold rounded-md shadow-xl w-80 h-40 bg-gray-50">
+      <div className="grid grid-cols-1 gap-3 w-full py-3 overflow-auto mt-8">
+        <div
+          className={`mx-auto flex flex-col flex-wrap justify-center items-center text-lg font-bold rounded-md shadow-xl w-80 h-40 ${
+            state.colorMode === "dark"
+              ? "bg-gray-900 text-cyan-700"
+              : "bg-gray-50 text-gray-900"
+          }`}
+        >
           <FaUsers size={40} className="text-yellow-400" />
-          <p className="text-cyan-900">Number Of Customers</p>
-          <p className="text-gray-900">{customers}</p>
+          <p className="">Number Of Customers</p>
+          <p className="">{customers}</p>
         </div>
-        <div className="mx-auto flex flex-col flex-wrap justify-center items-center text-lg font-bold rounded-md shadow-xl w-80 h-40 bg-gray-50">
+        <div
+          className={`mx-auto flex flex-col flex-wrap justify-center items-center text-lg font-bold rounded-md shadow-xl w-80 h-40 ${
+            state.colorMode === "dark"
+              ? "bg-gray-900 text-cyan-700"
+              : "bg-gray-50 text-gray-900"
+          }`}
+        >
           <FaUserCheck size={40} className="text-red-400" />
-          <p className="text-gray-900">Next Appointments</p>
-          <p className="text-gray-900">{waitingAppointments}</p>
+          <p className="">Next Appointments</p>
+          <p className="">{waitingAppointments}</p>
         </div>
-        <div className="mx-auto flex flex-col flex-wrap justify-center items-center text-lg font-bold rounded-md shadow-xl w-80 h-40 bg-gray-50">
+        <div
+          className={`mx-auto flex flex-col flex-wrap justify-center items-center text-lg font-bold rounded-md shadow-xl w-80 h-40 ${
+            state.colorMode === "dark"
+              ? "bg-gray-900 text-cyan-700"
+              : "bg-gray-50 text-gray-900"
+          }`}
+        >
           <MdDone size={40} className="text-green-400" />
-          <p className="text-gray-900">Finished Appointments</p>
-          <p className="text-gray-900">{finishedAppointments}</p>
+          <p className="">Finished Appointments</p>
+          <p className="">{finishedAppointments}</p>
         </div>
-        <div className="mx-auto flex flex-col flex-wrap justify-center items-center text-lg font-bold rounded-md shadow-xl w-80 h-40 bg-gray-50">
+        <div
+          className={`mx-auto flex flex-col flex-wrap justify-center items-center text-lg font-bold rounded-md shadow-xl w-80 h-40 ${
+            state.colorMode === "dark"
+              ? "bg-gray-900 text-cyan-700"
+              : "bg-gray-50 text-gray-900"
+          }`}
+        >
           <IoTodaySharp size={40} className="text-blue-400" />
-          <p className="text-gray-900">Today's Appointments</p>
-          <p className="text-gray-900">{todayAppointment}</p>
+          <p className="">Today's Appointments</p>
+          <p className="">{todayAppointment}</p>
         </div>
       </div>
     );

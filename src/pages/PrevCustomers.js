@@ -232,23 +232,39 @@ const PrevCustomers = () => {
             <div className="p-1.5 w-full inline-block align-middle">
               <div className="overflow-hidden border rounded-lg">
                 <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
+                  <thead
+                    className={`${
+                      state.colorMode === "dark" ? "bg-gray-900" : "bg-gray-50"
+                    }`}
+                  >
                     <tr>
                       <th
                         scope="col"
-                        className="px-2 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                        className={`px-2 py-3 text-start text-xs font-bold ${
+                          state.colorMode === "dark"
+                            ? "text-cyan-700"
+                            : "text-gray-500"
+                        } uppercase `}
                       >
                         #
                       </th>
                       <th
                         scope="col"
-                        className="px-2 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                        className={`px-2 py-3 text-start text-xs font-bold ${
+                          state.colorMode === "dark"
+                            ? "text-cyan-700"
+                            : "text-gray-500"
+                        } uppercase `}
                       >
                         Name
                       </th>
                       <th
                         scope="col"
-                        className="px-2 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                        className={`px-2 py-3 text-start text-xs font-bold ${
+                          state.colorMode === "dark"
+                            ? "text-cyan-700"
+                            : "text-gray-500"
+                        } uppercase `}
                       >
                         Phone
                       </th>
@@ -266,9 +282,13 @@ const PrevCustomers = () => {
                         </th> */}
                       <th
                         scope="col"
-                        className="px-2 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                        className={`px-2 py-3 text-start text-xs font-bold ${
+                          state.colorMode === "dark"
+                            ? "text-cyan-700"
+                            : "text-gray-500"
+                        } uppercase `}
                       >
-                        Delete
+                        Action
                       </th>
                     </tr>
                   </thead>
@@ -288,14 +308,32 @@ const PrevCustomers = () => {
                         return (
                           !customer.active && (
                             <tr key={index}>
-                              <td className="px-2 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
+                              <td
+                                className={`px-2 py-4 text-start text-sm ${
+                                  state.colorMode === "dark"
+                                    ? "text-gray-400"
+                                    : "text-gray-800"
+                                } whitespace-nowrap`}
+                              >
                                 <span>{"0".repeat(index.length)}</span>
                                 {index + 1}
                               </td>
-                              <td className="px-2 py-4 text-sm text-gray-800 whitespace-nowrap">
+                              <td
+                                className={`px-2 py-4 text-start text-sm ${
+                                  state.colorMode === "dark"
+                                    ? "text-gray-400"
+                                    : "text-gray-800"
+                                } whitespace-nowrap`}
+                              >
                                 {customer.name}
                               </td>
-                              <td className="px-2 py-4 text-sm text-gray-800 whitespace-nowrap">
+                              <td
+                                className={`px-2 py-4 text-start text-sm ${
+                                  state.colorMode === "dark"
+                                    ? "text-gray-400"
+                                    : "text-gray-800"
+                                } whitespace-nowrap`}
+                              >
                                 {customer.phone}
                               </td>
                               {/* <td className="px-2 py-4 text-sm flex justify-center font-medium whitespace-nowrap">
@@ -314,7 +352,13 @@ const PrevCustomers = () => {
                                 } w-fit text-sm text-white text-center rounded font-semibold p-1`}
                               ></p>
                             </td> */}
-                              <td className="px-2 py-4 text-sm text-gray-800 whitespace-nowrap">
+                              <td
+                                className={`px-2 py-4 text-start text-sm ${
+                                  state.colorMode === "dark"
+                                    ? "text-gray-400"
+                                    : "text-gray-800"
+                                } whitespace-nowrap`}
+                              >
                                 <button
                                   className="mx-2"
                                   onClick={() =>
@@ -326,14 +370,21 @@ const PrevCustomers = () => {
                                     size={30}
                                   />
                                 </button>
-                                <button
-                                  className="mx-2"
-                                  onClick={() =>
-                                    handleDeleteCustomerAccount(customer["_id"])
-                                  }
-                                >
-                                  <TiTrash className="text-red-600" size={30} />
-                                </button>
+                                {login.state.accountType === "admin" && (
+                                  <button
+                                    className="mx-2"
+                                    onClick={() =>
+                                      handleDeleteCustomerAccount(
+                                        customer["_id"]
+                                      )
+                                    }
+                                  >
+                                    <TiTrash
+                                      className="text-red-600"
+                                      size={30}
+                                    />
+                                  </button>
+                                )}
                               </td>
                             </tr>
                           )

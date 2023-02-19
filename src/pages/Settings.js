@@ -17,30 +17,59 @@ const Settings = () => {
   const login = React.useContext(loginContext);
   const [phoneArr, setPhoneArr] = React.useState([]);
   const [nameArr, setNameArr] = React.useState([]);
+  const token = localStorage.getItem("token");
   React.useEffect(() => {
-    axiosInstance
-      .get("/customer/")
-      .then((res) => {
-        console.log(res.data);
-        let arr = [];
-        let arr2 = [];
-        res.data.forEach((customer) => {
-          arr.push(customer.phone);
-          arr2.push(customer.name);
+    if (login.state.accountType === "admin") {
+      axiosInstance
+        .get("/admin/customer/", {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          let arr = [];
+          let arr2 = [];
+          res.data.forEach((customer) => {
+            arr.push(customer.phone);
+            arr2.push(customer.name);
+          });
+          setPhoneArr(arr);
+          setNameArr(arr2);
+        })
+        .catch((err) => {
+          console.log(err);
         });
-        setPhoneArr(arr);
-        setNameArr(arr2);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    }
+    if (login.state.accountType === "manager") {
+      axiosInstance
+        .get("/manager/customer/", {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          let arr = [];
+          let arr2 = [];
+          res.data.forEach((customer) => {
+            arr.push(customer.phone);
+            arr2.push(customer.name);
+          });
+          setPhoneArr(arr);
+          setNameArr(arr2);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, []);
 
   return (
     <div className="w-full">
       <div className={`mb-4 w-full`}>
         <h1 className="text-2xl font-bold mb-14 p-6">Settings</h1>
-        <div className="w-full p-2">
+        <div className="w-full p-4">
           <h2 className="text-2xl font-semibold">Accounts</h2>
           {login.state.accountType === "admin" && (
             <>
@@ -312,13 +341,27 @@ const Settings = () => {
             </div>
           )}
         </div>
-        <div className="w-full p-2 mt-4 border-t">
-          <h2 className="text-2xl font-semibold">Color</h2>
-          <div className="p-4">
-            <button onClick={() => setColorMode("Light")} className="mr-3">
+        <div className="w-full p-4 mt-4 border-t">
+          <h2 className="text-2xl font-semibold">Color Mode</h2>
+          <div className="p-1 mt-2 flex items-center bg-gray-100 rounded-full w-fit ">
+            <button
+              onClick={() => setColorMode("light")}
+              className={`p-2 rounded-l-full pr-3 ${
+                state.colorMode === "light"
+                  ? "bg-gray-300 shadow"
+                  : "shadow-inner"
+              }`}
+            >
               <MdLightMode className="text-yellow-500" size={20} />{" "}
             </button>
-            <button onClick={() => setColorMode("Dark")} className="ml-3">
+            <button
+              onClick={() => setColorMode("dark")}
+              className={`p-2 rounded-r-full pl-3 ${
+                state.colorMode === "dark"
+                  ? "bg-gray-300 shadow"
+                  : "shadow-inner"
+              }`}
+            >
               <MdNightlight className="text-blue-900" size={20} />{" "}
             </button>
           </div>

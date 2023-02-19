@@ -14,7 +14,7 @@ import Settings from "./pages/Settings";
 
 function App() {
   const [sidebarExtend, setSidebarExtend] = React.useState(true);
-  const [colorMode, setColorMode] = React.useState("light");
+  const [colorMode, setColorMode] = React.useState("dark");
   const [isLoggged, setIsLogged] = React.useState(
     localStorage.getItem("token") ? true : false
   );
@@ -40,12 +40,16 @@ function App() {
           setColorMode: setColorMode,
         }}
       >
-        <div className="App flex w-full h-screen">
+        <div
+          className={`App flex w-full ${
+            colorMode === "dark" && "bg-gray-700"
+          } h-screen`}
+        >
           <Router>
             {isLoggged && (
               <div
                 className={`${
-                  sidebarExtend ? "md:mr-[200px]" : "md:mr-[78px]"
+                  sidebarExtend ? "md:mr-[220px]" : "md:mr-[78px]"
                 }`}
               >
                 <Sidebar
