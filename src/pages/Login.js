@@ -2,15 +2,18 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axiosInstance from "../axios config/axiosInstance";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import loginContext from "../context/LoginContext";
 
 const Login = () => {
   const navigate = useNavigate();
   const login = React.useContext(loginContext);
+  const [formErrorAdmin, setFormErrorAdmin] = React.useState(false);
+  const [formErrorManager, setFormErrorManager] = React.useState(false);
   React.useEffect(() => {
     if (login.state.isLoggged === true) navigate("/");
   }, []);
+
   if (login.state.isLoggged === false) {
     return (
       <div className="w-screen h-screen flex flex-col justify-center items-center">
@@ -46,10 +49,10 @@ const Login = () => {
             })}
             onSubmit={(values, { setSubmitting }) => {
               setSubmitting(false);
-              console.log(JSON.stringify(values));
+              // console.log(JSON.stringify(values));
               axiosInstance
                 .post(
-                  "/admin/login/",
+                  "/admin/login",
 
                   JSON.stringify(values),
                   {
@@ -59,13 +62,15 @@ const Login = () => {
                   }
                 )
                 .then((res) => {
-                  console.log(res.data);
+                  // console.log(res);
+                  setFormErrorAdmin(false);
                   localStorage.setItem("token", res.data);
                   login.setIsLogged(true);
                   navigate("/");
                 })
                 .catch((err) => {
                   console.log(err);
+                  setFormErrorAdmin(true);
                 });
             }}
           >
@@ -102,6 +107,11 @@ const Login = () => {
                       )}
                     </ErrorMessage>
                   </div>
+                  {formErrorAdmin && (
+                    <div className="text-sm text-red-500">
+                      Invalid credintials
+                    </div>
+                  )}
                   <button
                     type="submit"
                     className="text-xl mt-3 border border-gray-800 hover:bg-gray-800 hover:text-white mx-5 w-32 text-center rounded  py-2 transition-all"
@@ -136,12 +146,14 @@ const Login = () => {
                   }
                 )
                 .then((res) => {
+                  setFormErrorManager(false);
                   console.log(res.data);
                   localStorage.setItem("token", res.data);
                   login.setIsLogged(true);
                   navigate("/");
                 })
                 .catch((err) => {
+                  setFormErrorManager(true);
                   console.log(err);
                 });
             }}
@@ -179,6 +191,11 @@ const Login = () => {
                       )}
                     </ErrorMessage>
                   </div>
+                  {formErrorManager && (
+                    <div className="text-sm text-red-500">
+                      Invalid credintials
+                    </div>
+                  )}
                   <button
                     type="submit"
                     className="text-xl mt-3 border border-gray-800 hover:bg-gray-800 hover:text-white mx-5 w-32 text-center rounded  py-2 transition-all"
@@ -191,6 +208,9 @@ const Login = () => {
             )}
           </Formik>
         )}
+        <Link className="text-blue-600 text-sm underline" to="/register">
+          If you don't have an Admin account you can register here
+        </Link>
       </div>
     );
   }

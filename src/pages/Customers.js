@@ -180,17 +180,17 @@ const Customers = () => {
                         Phone
                       </th>
                       {/* <th
-                          scope="col"
-                          className="px-2 py-3 text-xs font-bold text-gray-500 uppercase "
-                        >
-                          Queue Number
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-2 py-3 text-xs font-bold text-gray-500 uppercase "
-                        >
-                          Queue status
-                        </th> */}
+                        scope="col"
+                        className="px-2 py-3 text-xs font-bold text-gray-500 uppercase "
+                      >
+                        Queue Number
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-2 py-3 text-xs font-bold text-gray-500 uppercase "
+                      >
+                        Queue status
+                      </th> */}
                       <th
                         scope="col"
                         className={`px-2 py-3 text-start text-xs font-bold ${
@@ -248,21 +248,27 @@ const Customers = () => {
                                 {customer.phone}
                               </td>
                               {/* <td className="px-2 py-4 text-sm flex justify-center font-medium whitespace-nowrap">
-                              {customer.appointment.number
-                                ? "have an appointment"
-                                : "does not an appointment"}
-                            </td>
-                            <td className="px-2 py-4 text-sm font-medium whitespace-nowrap">
-                              <p
-                                className={`${
-                                  customer.appointment.status === "Finished" &&
-                                  "bg-green-500"
-                                } ${
-                                  customer.appointment.status === "Waiting" &&
-                                  "bg-red-500"
-                                } w-fit text-sm text-white text-center rounded font-semibold p-1`}
-                              ></p>
-                            </td> */}
+                                {customer.appointment.number
+                                  ? "have an appointment"
+                                  : "does not an appointment"}
+                              </td>
+                              <td className="px-2 py-4 text-sm font-medium whitespace-nowrap">
+                                {customer.appointment.status ? (
+                                  <p
+                                    className={`${
+                                      customer.appointment.status ===
+                                        "Finished" && "bg-green-500"
+                                    } ${
+                                      customer.appointment.status ===
+                                        "Waiting" && "bg-red-500"
+                                    } w-fit text-sm text-white text-center rounded font-semibold p-1`}
+                                  >
+                                    {customer.appointment.status}
+                                  </p>
+                                ) : (
+                                  <p>-</p>
+                                )}
+                              </td> */}
                               <td
                                 className={`px-2 py-4 text-start text-sm ${
                                   state.colorMode === "dark"

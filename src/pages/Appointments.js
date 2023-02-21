@@ -270,7 +270,7 @@ const Appointments = () => {
                         <td
                           className="text-center font-semibold text-lg"
                           align="center"
-                          colpan="4"
+                          colSpan="4"
                         >
                           There are no Appointments
                         </td>
@@ -292,15 +292,27 @@ const Appointments = () => {
                             >
                               {appointment.number}
                             </td>
-                            <td
-                              className={`px-2 py-4 text-start text-sm ${
-                                state.colorMode === "dark"
-                                  ? "text-gray-400"
-                                  : "text-gray-800"
-                              } whitespace-nowrap`}
-                            >
-                              {appointment.customer.name}
-                            </td>
+                            {appointment.customer.name ? (
+                              <td
+                                className={`px-2 py-4 text-start text-sm ${
+                                  state.colorMode === "dark"
+                                    ? "text-gray-400"
+                                    : "text-gray-800"
+                                } whitespace-nowrap`}
+                              >
+                                {appointment.customer.name}
+                              </td>
+                            ) : (
+                              <td
+                                className={`px-2 py-4 text-start text-sm ${
+                                  state.colorMode === "dark"
+                                    ? "text-gray-400"
+                                    : "text-gray-800"
+                                } whitespace-nowrap`}
+                              >
+                                -
+                              </td>
+                            )}
                             <td
                               className={`hidden md:table-cell px-2 py-4 text-start text-sm ${
                                 state.colorMode === "dark"

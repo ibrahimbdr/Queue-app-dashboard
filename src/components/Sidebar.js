@@ -13,10 +13,12 @@ import { Link } from "react-router-dom";
 import sidebarContext from "../context/SidebarContext";
 import loginContext from "../context/LoginContext";
 import { useNavigate } from "react-router-dom";
+import titleContext from "../context/TitleContext";
 
 const Sidebar = () => {
   const { state, setSidebarExtend } = React.useContext(sidebarContext);
   const login = React.useContext(loginContext);
+  const shopTitle = React.useContext(titleContext);
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -25,7 +27,7 @@ const Sidebar = () => {
   };
   return (
     <div
-      className={`self-start shadow-lg fixed top-0 h-screen hidden md:block ${
+      className={`self-start shadow-lg fixed top-0 h-screen overflow-auto hidden md:block ${
         state.sidebarExtend ? "w-[220px]" : "w-fit"
       } ${state.colorMode === "dark" && "bg-gray-900 text-cyan-700"} ${
         state.colorMode === "light" && "bg-gray-50 text-black"
@@ -37,7 +39,9 @@ const Sidebar = () => {
         } items-center`}
       >
         {state.sidebarExtend && (
-          <h1 className="text-gray-800 font-bold text-xl">My Shop</h1>
+          <h1 className="text-gray-800 font-bold text-xl">
+            {shopTitle.state.title.shopName}
+          </h1>
         )}
         {state.sidebarExtend ? (
           <button

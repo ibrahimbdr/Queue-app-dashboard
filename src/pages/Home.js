@@ -13,6 +13,7 @@ const Home = () => {
   const { state, setSidebarExtend } = React.useContext(sidebarContext);
   const login = React.useContext(loginContext);
   const navigate = useNavigate();
+
   React.useEffect(() => {
     if (login.state.isLoggged === false) navigate("/login");
   }, []);

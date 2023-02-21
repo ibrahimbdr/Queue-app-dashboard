@@ -11,6 +11,9 @@ import loginContext from "./context/LoginContext";
 import PrevCustomers from "./pages/PrevCustomers";
 import PrevAppointments from "./pages/PrevAppointments";
 import Settings from "./pages/Settings";
+import Register from "./pages/Register";
+import titleContext from "./context/TitleContext";
+import axiosInstance from "./axios config/axiosInstance";
 
 function App() {
   const [sidebarExtend, setSidebarExtend] = React.useState(true);
@@ -19,6 +22,13 @@ function App() {
     localStorage.getItem("token") ? true : false
   );
   const [accountType, setAccountType] = React.useState("admin");
+  const [title, setTitle] = React.useState({ id: "", ShopName: "My Shop" });
+  React.useEffect(() => {
+    axiosInstance.get("/admin/shop/").then((res) => {
+      console.log(res.data[0].shopName);
+      setTitle({ id: res.data[0]["_id"], shopName: res.data[0].shopName });
+    });
+  }, []);
   return (
     <loginContext.Provider
       value={{
@@ -30,51 +40,61 @@ function App() {
         setAccountType: setAccountType,
       }}
     >
-      <sidebarContext.Provider
+      <titleContext.Provider
         value={{
           state: {
-            sidebarExtend: sidebarExtend,
-            colorMode: colorMode,
+            title: title,
           },
-          setSidebarExtend: setSidebarExtend,
-          setColorMode: setColorMode,
+          setTitle: setTitle,
         }}
       >
-        <div
-          className={`App flex w-full ${
-            colorMode === "dark" && "bg-gray-700"
-          } h-screen`}
+        <sidebarContext.Provider
+          value={{
+            state: {
+              sidebarExtend: sidebarExtend,
+              colorMode: colorMode,
+            },
+            setSidebarExtend: setSidebarExtend,
+            setColorMode: setColorMode,
+          }}
         >
-          <Router>
-            {isLoggged && (
-              <div
-                className={`${
-                  sidebarExtend ? "md:mr-[220px]" : "md:mr-[78px]"
-                }`}
-              >
-                <Sidebar
-                  sidebarExtend={sidebarExtend}
-                  setSidebarExtend={setSidebarExtend}
+          <div
+            className={`App flex w-full ${
+              colorMode === "dark" && "bg-gray-700"
+            } h-screen`}
+          >
+            <Router>
+              {isLoggged && (
+                <div
+                  className={`${
+                    sidebarExtend ? "md:mr-[220px]" : "md:mr-[78px]"
+                  }`}
+                >
+                  <Sidebar
+                    sidebarExtend={sidebarExtend}
+                    setSidebarExtend={setSidebarExtend}
+                  />
+                  <Bottombar />
+                </div>
+              )}
+              <Routes>
+                <Route path="/" exact element={<Home />} />
+                <Route path="/customers" exact element={<Customers />} />
+                <Route path="/customers-n" exact element={<PrevCustomers />} />
+                <Route path="/appointments" exact element={<Appointments />} />
+                <Route
+                  path="/appointments-f"
+                  exact
+                  element={<PrevAppointments />}
                 />
-                <Bottombar />
-              </div>
-            )}
-            <Routes>
-              <Route path="/" exact element={<Home />} />
-              <Route path="/customers" exact element={<Customers />} />
-              <Route path="/customers-n" exact element={<PrevCustomers />} />
-              <Route path="/appointments" exact element={<Appointments />} />
-              <Route
-                path="/appointments-f"
-                exact
-                element={<PrevAppointments />}
-              />
-              <Route path="/settings" exact element={<Settings />} />
-              <Route path="/login" exact element={<Login />} />
-            </Routes>
-          </Router>
-        </div>
-      </sidebarContext.Provider>
+                <Route path="/settings" exact element={<Settings />} />
+                <Route path="/login" exact element={<Login />} />
+                <Route path="/register" exact element={<Register />} />
+              </Routes>
+            </Router>
+          </div>
+        </sidebarContext.Provider>
+      </titleContext.Provider>
     </loginContext.Provider>
   );
 }
