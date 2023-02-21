@@ -455,7 +455,11 @@ const Settings = () => {
           </div>
           <div className="w-full p-4 mt-4 border-t">
             <h2 className="text-2xl font-semibold">Color Mode</h2>
-            <div className="p-1 mt-2 flex items-center bg-gray-100 rounded-full w-fit ">
+            <div
+              className={`p-1 mt-2 flex items-center ${
+                state.colorMode === "dark" ? "bg-gray-900" : "bg-gray-100"
+              } rounded-full w-fit `}
+            >
               <button
                 onClick={() => setColorMode("light")}
                 className={`p-2 rounded-l-full pr-3 ${
@@ -470,7 +474,7 @@ const Settings = () => {
                 onClick={() => setColorMode("dark")}
                 className={`p-2 rounded-r-full pl-3 ${
                   state.colorMode === "dark"
-                    ? "bg-gray-300 shadow"
+                    ? "bg-gray-600 shadow"
                     : "shadow-inner"
                 }`}
               >
@@ -478,79 +482,81 @@ const Settings = () => {
               </button>
             </div>
           </div>
-          <div className="w-full p-4 mt-4 border-t">
-            <h2 className="text-2xl mb-2 font-semibold">Shop Title</h2>
-            <Formik
-              initialValues={{ shopName: "" }}
-              validationSchema={Yup.object({
-                shopName: Yup.string().required("You must Enter a name!!!"),
-              })}
-              validateOnChange={false}
-              onSubmit={(values, { setSubmitting }) => {
-                setSubmitting(false);
-                axiosInstance
-                  .patch(
-                    `/admin/shop/${shopTitle.state.title.id}`,
+          {login.state.accountType === "admin" && (
+            <div className="w-full p-4 mt-4 border-t">
+              <h2 className="text-2xl mb-2 font-semibold">Shop Title</h2>
+              <Formik
+                initialValues={{ shopName: "" }}
+                validationSchema={Yup.object({
+                  shopName: Yup.string().required("You must Enter a name!!!"),
+                })}
+                validateOnChange={false}
+                onSubmit={(values, { setSubmitting }) => {
+                  setSubmitting(false);
+                  axiosInstance
+                    .patch(
+                      `/admin/shop/${shopTitle.state.title.id}`,
 
-                    { shopName: values.shopName },
-                    {
-                      headers: {
-                        "Content-Type": "application/json",
-                        Authorization: token,
-                      },
-                    }
-                  )
-                  .then((res) => {
-                    console.log("Title is Changed");
-                    console.log(res.data);
-                    setAlertModel("true");
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  });
-              }}
-            >
-              {({ isSubmitting, errors }) => (
-                <Form
-                  className={`${
-                    state.colorMode === "dark" ? "bg-gray-900" : "bg-gray-50"
-                  }`}
-                >
-                  <div
-                    className={`p-4 shadow ${
-                      state.colorMode === "dark"
-                        ? "bg-gray-900 text-cyan-700"
-                        : "bg-gray-50 text-gray-900"
-                    } rounded`}
+                      { shopName: values.shopName },
+                      {
+                        headers: {
+                          "Content-Type": "application/json",
+                          Authorization: token,
+                        },
+                      }
+                    )
+                    .then((res) => {
+                      console.log("Title is Changed");
+                      console.log(res.data);
+                      setAlertModel("true");
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
+                }}
+              >
+                {({ isSubmitting, errors }) => (
+                  <Form
+                    className={`${
+                      state.colorMode === "dark" ? "bg-gray-900" : "bg-gray-50"
+                    }`}
                   >
-                    <div className="my-4 w-full">
-                      <label htmlFor="shopName" className="block">
-                        Enter new shop name
-                      </label>
-                      <Field
-                        type="text"
-                        name="shopName"
-                        className="h-10 rounded w-full p-1"
-                      />
-                      <ErrorMessage name="shopName">
-                        {(msg) => (
-                          <div className="text-sm text-red-500">{msg}</div>
-                        )}
-                      </ErrorMessage>
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="text-xl mt-3 border border-gray-800 hover:bg-gray-800 hover:text-white mx-5 w-32 text-center rounded  py-2 transition-all"
-                      disabled={isSubmitting}
+                    <div
+                      className={`p-4 shadow ${
+                        state.colorMode === "dark"
+                          ? "bg-gray-900 text-cyan-700"
+                          : "bg-gray-50 text-gray-900"
+                      } rounded`}
                     >
-                      Change
-                    </button>
-                  </div>
-                </Form>
-              )}
-            </Formik>
-          </div>
+                      <div className="my-4 w-full">
+                        <label htmlFor="shopName" className="block">
+                          Enter new shop name
+                        </label>
+                        <Field
+                          type="text"
+                          name="shopName"
+                          className="h-10 rounded w-full p-1"
+                        />
+                        <ErrorMessage name="shopName">
+                          {(msg) => (
+                            <div className="text-sm text-red-500">{msg}</div>
+                          )}
+                        </ErrorMessage>
+                      </div>
+
+                      <button
+                        type="submit"
+                        className="text-xl mt-3 border border-gray-800 hover:bg-gray-800 hover:text-white mx-5 w-32 text-center rounded  py-2 transition-all"
+                        disabled={isSubmitting}
+                      >
+                        Change
+                      </button>
+                    </div>
+                  </Form>
+                )}
+              </Formik>
+            </div>
+          )}
         </div>
       </div>
     );
