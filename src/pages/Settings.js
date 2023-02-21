@@ -12,6 +12,7 @@ import RegisterModel from "../components/RegisterModel";
 import titleContext from "../context/TitleContext";
 import { useNavigate } from "react-router-dom";
 import Alert from "../components/Alert";
+import registerContext from "../context/RegisterContext";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -31,10 +32,12 @@ const Settings = () => {
   const [managersEmails, setManagersEmails] = React.useState([]);
   const [managersPhones, setManagersPhones] = React.useState([]);
   const phoneRegExp = /[0-9]/;
+  const register = React.useContext(registerContext);
 
   React.useEffect(() => {
     if (login.state.isLoggged === false) navigate("/login");
   }, []);
+
   React.useEffect(() => {
     if (login.state.accountType === "admin") {
       axiosInstance
@@ -110,6 +113,47 @@ const Settings = () => {
         });
     }
   }, []);
+
+  const handleAdminRegisterationOff = () => {
+    console.log("admin register off");
+    axiosInstance
+      .patch(
+        `/admin/shop/${shopTitle.state.title.id}/`,
+
+        { registerActive: false },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
+      )
+      .then((res) => {
+        register.setCanRegister(false);
+        console.log(res.data);
+      });
+  };
+
+  const handleAdminRegisterationOn = () => {
+    console.log("admin register on");
+    axiosInstance
+      .patch(
+        `/admin/shop/${shopTitle.state.title.id}/`,
+
+        { registerActive: true },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
+      )
+      .then((res) => {
+        register.setCanRegister(true);
+        console.log(res.data);
+      });
+  };
+
   if (login.state.isLoggged === true) {
     return (
       <div className="w-full">
@@ -130,7 +174,7 @@ const Settings = () => {
           setModel={setAlertModel}
           Model={alertModel}
         />
-        <div className={`mb-4 w-full`}>
+        <div className={`mb-4 w-full h-full`}>
           <h1 className="text-3xl font-bold mb-14 p-6">Settings</h1>
           <div className="w-full p-4">
             <h2 className="text-2xl mb-2 font-semibold">Accounts</h2>
@@ -463,9 +507,7 @@ const Settings = () => {
               <button
                 onClick={() => setColorMode("light")}
                 className={`p-2 rounded-l-full pr-3 ${
-                  state.colorMode === "light"
-                    ? "bg-gray-300 shadow"
-                    : "shadow-inner"
+                  state.colorMode === "light" ? "shadow" : "shadow-inner"
                 }`}
               >
                 <MdLightMode className="text-yellow-500" size={20} />{" "}
@@ -474,8 +516,8 @@ const Settings = () => {
                 onClick={() => setColorMode("dark")}
                 className={`p-2 rounded-r-full pl-3 ${
                   state.colorMode === "dark"
-                    ? "bg-gray-600 shadow"
-                    : "shadow-inner"
+                    ? "bg-gray-600 shadow-inner "
+                    : "bg-gray-300 shadow-inner"
                 }`}
               >
                 <MdNightlight className="text-blue-900" size={20} />{" "}
@@ -555,6 +597,48 @@ const Settings = () => {
                   </Form>
                 )}
               </Formik>
+            </div>
+          )}
+
+          {login.state.accountType === "admin" && (
+            <div className="w-full p-4 mt-4 border-t">
+              <h2 className="text-2xl font-semibold">
+                Allow Admin Registeration
+              </h2>
+              <div
+                className={`p-1 mt-2 flex items-center ${
+                  state.colorMode === "dark" ? "bg-gray-900" : "bg-gray-100"
+                } rounded-full w-fit `}
+              >
+                <button
+                  onClick={handleAdminRegisterationOn}
+                  className={`p-2 rounded-l-full pr-3 ${
+                    state.colorMode === "dark"
+                      ? register.state.canRegister
+                        ? "bg-gray-600  text-cyan-700 shadow-inner"
+                        : "shadow text-gray-300"
+                      : register.state.canRegister
+                      ? "shadow"
+                      : "bg-gray-300 shadow"
+                  }`}
+                >
+                  Enable
+                </button>
+                <button
+                  onClick={handleAdminRegisterationOff}
+                  className={`p-2 rounded-r-full pl-3 ${
+                    state.colorMode === "dark"
+                      ? !register.state.canRegister
+                        ? "bg-gray-600  text-cyan-700 shadow-inner"
+                        : "shadow text-gray-300"
+                      : !register.state.canRegister
+                      ? "shadow"
+                      : "bg-gray-300 shadow"
+                  }`}
+                >
+                  Disable
+                </button>
+              </div>
             </div>
           )}
         </div>

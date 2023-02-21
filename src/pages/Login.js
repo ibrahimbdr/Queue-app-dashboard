@@ -4,12 +4,15 @@ import * as Yup from "yup";
 import axiosInstance from "../axios config/axiosInstance";
 import { Link, useNavigate } from "react-router-dom";
 import loginContext from "../context/LoginContext";
+import registerContext from "../context/RegisterContext";
 
 const Login = () => {
   const navigate = useNavigate();
   const login = React.useContext(loginContext);
   const [formErrorAdmin, setFormErrorAdmin] = React.useState(false);
   const [formErrorManager, setFormErrorManager] = React.useState(false);
+  const register = React.useContext(registerContext);
+
   React.useEffect(() => {
     if (login.state.isLoggged === true) navigate("/");
   }, []);
@@ -208,9 +211,11 @@ const Login = () => {
             )}
           </Formik>
         )}
-        <Link className="text-blue-600 text-sm underline" to="/register">
-          If you don't have an Admin account you can register here
-        </Link>
+        {register.state.canRegister && (
+          <Link className="text-blue-600 text-sm underline" to="/register">
+            If you don't have an Admin account you can register here
+          </Link>
+        )}
       </div>
     );
   }
