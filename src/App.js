@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  HashRouter,
+  Route,
+  Routes,
+} from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Appointments from "./pages/Appointments";
@@ -93,7 +98,7 @@ function App() {
                 colorMode === "dark" && "bg-gray-700"
               } min-h-screen`}
             >
-              <Router>
+              <HashRouter>
                 {isLoggged && (
                   <div
                     className={`${
@@ -133,7 +138,7 @@ function App() {
                     <Route path="*" exact element={<NotFound />} />
                   </Routes>
                 </div>
-              </Router>
+              </HashRouter>
             </div>
           </sidebarContext.Provider>
         </titleContext.Provider>
