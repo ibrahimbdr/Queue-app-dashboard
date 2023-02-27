@@ -48,7 +48,7 @@ const PrevCustomers = () => {
           console.log(err);
         });
       axiosInstance
-        .get(`/admin/customer`, {
+        .get(`/customer/`, {
           headers: {
             Authorization: token,
           },
@@ -82,7 +82,7 @@ const PrevCustomers = () => {
           console.log(err);
         });
       axiosInstance
-        .get(`/manager/customer`, {
+        .get(`/customer/`, {
           headers: {
             Authorization: token,
           },
@@ -115,7 +115,7 @@ const PrevCustomers = () => {
           console.log(err);
         });
       axiosInstance
-        .get(`/admin/customer`, {
+        .get(`/customer/`, {
           headers: {
             Authorization: token,
           },
@@ -144,7 +144,7 @@ const PrevCustomers = () => {
           console.log(err);
         });
       axiosInstance
-        .get(`/manager/customer`, {
+        .get(`/customer/`, {
           headers: {
             Authorization: token,
           },
@@ -160,49 +160,26 @@ const PrevCustomers = () => {
     }
   };
 
-  useEffect(() => {
-    if (login.state.accountType === "admin") {
-      axiosInstance
-        .get(`/admin/customer`, {
-          headers: {
-            Authorization: token,
-          },
-        })
-        .then((res) => {
-          let NonActiveCustomers = res.data.filter((data) => {
-            return !data.active;
-          });
-          console.log(NonActiveCustomers);
-          setCustomers(sliceIntoChunks(NonActiveCustomers, 10));
-          console.log(customers);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-    if (login.state.accountType === "manager") {
-      axiosInstance
-        .get(`/manager/customer`, {
-          headers: {
-            Authorization: token,
-          },
-        })
-        .then((res) => {
-          let NonActiveCustomers = res.data.filter((data) => {
-            return !data.active;
-          });
-          console.log(res.data);
-          // setCustomers(sliceIntoChunks(NonActiveCustomers, 10));
-          // console.log(customers);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, []);
-
   React.useEffect(() => {
     if (login.state.isLoggged === false) navigate("/login");
+
+    axiosInstance
+      .get(`/customer/`, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((res) => {
+        let NonActiveCustomers = res.data.filter((data) => {
+          return !data.active;
+        });
+        console.log(NonActiveCustomers);
+        setCustomers(sliceIntoChunks(NonActiveCustomers, 10));
+        console.log(customers);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
   if (login.state.isLoggged === true) {
     return (

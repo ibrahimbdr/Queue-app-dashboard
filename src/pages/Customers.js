@@ -48,7 +48,7 @@ const Customers = () => {
           console.log(err);
         });
       axiosInstance
-        .get(`/admin/customer`, {
+        .get(`/customer/`, {
           headers: {
             Authorization: token,
           },
@@ -81,7 +81,7 @@ const Customers = () => {
           console.log(err);
         });
       axiosInstance
-        .get(`/manager/customer`, {
+        .get(`/customer`, {
           headers: {
             Authorization: token,
           },
@@ -97,41 +97,22 @@ const Customers = () => {
     }
   };
 
-  useEffect(() => {
-    if (login.state.accountType === "admin") {
-      axiosInstance
-        .get(`/admin/customer`, {
-          headers: {
-            Authorization: token,
-          },
-        })
-        .then((res) => {
-          console.log([...customers, ...res.data]);
-          setCustomers(sliceIntoChunks(res.data, 10));
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-    if (login.state.accountType === "manager") {
-      axiosInstance
-        .get(`/admin/customer`, {
-          headers: {
-            Authorization: token,
-          },
-        })
-        .then((res) => {
-          console.log([...customers, ...res.data]);
-          setCustomers(sliceIntoChunks(res.data, 10));
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, []);
-
   React.useEffect(() => {
     if (login.state.isLoggged === false) navigate("/login");
+
+    axiosInstance
+      .get(`/customer`, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((res) => {
+        console.log([...customers, ...res.data]);
+        setCustomers(sliceIntoChunks(res.data, 10));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
   if (login.state.isLoggged === true) {
     return (

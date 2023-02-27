@@ -65,7 +65,7 @@ const Login = () => {
                   }
                 )
                 .then((res) => {
-                  // console.log(res);
+                  console.log(res.data);
                   setFormErrorAdmin(false);
                   localStorage.setItem("token", res.data);
                   login.setIsLogged(true);

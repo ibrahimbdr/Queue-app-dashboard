@@ -16,29 +16,62 @@ import registerContext from "../context/RegisterContext";
 
 const Settings = () => {
   const navigate = useNavigate();
-  const { state, setSidebarExtend, setColorMode } =
-    React.useContext(sidebarContext);
+  // side bar cotext for dark/light mode control
+  const { state, setColorMode } = React.useContext(sidebarContext);
+  // shop title context for setting shop title for the dashboard
   const shopTitle = React.useContext(titleContext);
+  // for showing and hiding manager registeration form
   const [mangerAccountDiv, setManagerAccountDiv] = React.useState(false);
+  // for showing and hiding customer registeration form
   const [customerAccountDiv, setCustomerAccountDiv] = React.useState(false);
+  // controlling admin registeration through canRegister value in the login context
   const login = React.useContext(loginContext);
+  // getting all customers phone numbers to check previously registered customers phones
   const [phoneArr, setPhoneArr] = React.useState([]);
+  // getting all customers phone numbers to check previously registered customers Names
   const [nameArr, setNameArr] = React.useState([]);
+  // alert for customers complete registration
   const [customerRegModel, setCustomerRegModel] = React.useState(false);
+  // alert for managers complete registration
   const [managerRegModel, setManagerRegModel] = React.useState(false);
   const [alertModel, setAlertModel] = React.useState(false);
   const token = localStorage.getItem("token");
+  // getting managers registered username for preventing conflict errors
   const [managersUsernames, setManagersUsernames] = React.useState([]);
+  // getting managers registered emails for preventing conflict errors
   const [managersEmails, setManagersEmails] = React.useState([]);
+  // getting managers registered phones for preventing conflict errors
   const [managersPhones, setManagersPhones] = React.useState([]);
+  // phone regex pattern for validation - you may reset according to the right phone formats
   const phoneRegExp = /[0-9]/;
+  // changing register button
   const register = React.useContext(registerContext);
 
   React.useEffect(() => {
+    // protecting setting page to prevent access whenever you are not logged in
     if (login.state.isLoggged === false) navigate("/login");
-  }, []);
+    // updating shop name
+    axiosInstance.get("/admin/shop/").then((res) => {
+      if (res.data[0] === null) {
+        axiosInstance.post(
+          "/admin/shop/",
+          {},
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: localStorage.getItem("token"),
+            },
+          }
+        );
+      }
+      console.log(res.data[0].shopName);
+      shopTitle.setTitle({
+        id: res.data[0]["_id"],
+        shopName: res.data[0].shopName,
+      });
+    });
 
-  React.useEffect(() => {
+    // getting registered managers
     if (login.state.accountType === "admin") {
       axiosInstance
         .get(
@@ -65,57 +98,34 @@ const Settings = () => {
           setManagersPhones(arr3);
         });
     }
+
+    // getting registered customers
+    axiosInstance
+      .get("/customer/", {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        let arr = [];
+        let arr2 = [];
+        res.data.forEach((customer) => {
+          arr.push(customer.phone);
+          arr2.push(customer.name);
+        });
+        setPhoneArr(arr);
+        setNameArr(arr2);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
-  React.useEffect(() => {
-    if (login.state.accountType === "admin") {
-      axiosInstance
-        .get("/admin/customer/", {
-          headers: {
-            Authorization: token,
-          },
-        })
-        .then((res) => {
-          console.log(res.data);
-          let arr = [];
-          let arr2 = [];
-          res.data.forEach((customer) => {
-            arr.push(customer.phone);
-            arr2.push(customer.name);
-          });
-          setPhoneArr(arr);
-          setNameArr(arr2);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-    if (login.state.accountType === "manager") {
-      axiosInstance
-        .get("/manager/customer/", {
-          headers: {
-            Authorization: token,
-          },
-        })
-        .then((res) => {
-          console.log(res.data);
-          let arr = [];
-          let arr2 = [];
-          res.data.forEach((customer) => {
-            arr.push(customer.phone);
-            arr2.push(customer.name);
-          });
-          setPhoneArr(arr);
-          setNameArr(arr2);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, []);
-
+  // disable registeration for new admin
   const handleAdminRegisterationOff = () => {
     console.log("admin register off");
+
     axiosInstance
       .patch(
         `/admin/shop/${shopTitle.state.title.id}/`,
@@ -134,6 +144,7 @@ const Settings = () => {
       });
   };
 
+  // enable registeration for new admin
   const handleAdminRegisterationOn = () => {
     console.log("admin register on");
     axiosInstance
@@ -170,7 +181,7 @@ const Settings = () => {
 
         <Alert
           msg={"Shop Name has been updated!"}
-          subMsg={"Effect will take place next time you log in"}
+          subMsg={"Effect will take place after refresh"}
           setModel={setAlertModel}
           Model={alertModel}
         />
@@ -212,7 +223,7 @@ const Settings = () => {
                           .required("Required")
                           .notOneOf(
                             managersUsernames,
-                            "This admin is regestered before"
+                            "This username has been regestered before"
                           ),
                         password: Yup.string()
                           .required("Required")
@@ -235,7 +246,7 @@ const Settings = () => {
                           .required("Required")
                           .notOneOf(
                             managersEmails,
-                            "This email is regestered before"
+                            "This email has been regestered before"
                           ),
                         phone: Yup.string()
                           .required("Required")
@@ -245,7 +256,7 @@ const Settings = () => {
                           )
                           .notOneOf(
                             managersPhones,
-                            "This phone is regestered before"
+                            "This phone has been regestered before"
                           ),
                       })}
                       onSubmit={(values, { setSubmitting }) => {
@@ -419,7 +430,7 @@ const Settings = () => {
                     setSubmitting(false);
                     axiosInstance
                       .post(
-                        "/manager/customer",
+                        "/customer",
 
                         JSON.stringify(values),
                         {

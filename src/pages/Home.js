@@ -14,29 +14,29 @@ const Home = () => {
   const login = React.useContext(loginContext);
   const navigate = useNavigate();
 
-  React.useEffect(() => {
-    if (login.state.isLoggged === false) navigate("/login");
-  }, []);
   let token = localStorage.getItem("token");
   const [customers, setCustomers] = React.useState(0);
   const [waitingAppointments, setWaitingAppointments] = React.useState(0);
   const [finishedAppointments, setFinishedAppointments] = React.useState(0);
   const [todayAppointment, setTodayAppointment] = React.useState(0);
-  useEffect(() => {
+  React.useEffect(() => {
+    if (login.state.isLoggged === false) navigate("/login");
+
+    axiosInstance
+      .get(`/customer/`, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setCustomers(res.data.length);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     if (login.state.accountType === "admin") {
-      axiosInstance
-        .get(`/admin/customer`, {
-          headers: {
-            Authorization: token,
-          },
-        })
-        .then((res) => {
-          console.log(res.data);
-          setCustomers(res.data.length);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
       axiosInstance
         .get(`/admin/appointment`, {
           headers: {
@@ -62,19 +62,6 @@ const Home = () => {
     }
     if (login.state.accountType === "manager") {
       axiosInstance
-        .get(`/manager/customer`, {
-          headers: {
-            Authorization: token,
-          },
-        })
-        .then((res) => {
-          console.log(res.data);
-          setCustomers(res.data.length);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      axiosInstance
         .get(`/manager/appointment`, {
           headers: {
             Authorization: token,
@@ -98,6 +85,7 @@ const Home = () => {
         });
     }
   }, []);
+
   if (login.state.isLoggged === true) {
     return (
       <div className="grid grid-cols-1 gap-3 w-full py-3 overflow-auto mt-8">

@@ -24,18 +24,29 @@ function App() {
   );
   const [accountType, setAccountType] = React.useState("admin");
   const [title, setTitle] = React.useState({ id: "", ShopName: "My Shop" });
+  const [canRegister, setCanRegister] = React.useState(true);
+
   React.useEffect(() => {
     axiosInstance.get("/admin/shop/").then((res) => {
-      console.log(res.data[0].shopName);
-      setTitle({ id: res.data[0]["_id"], shopName: res.data[0].shopName });
-    });
-  }, []);
-
-  const [canRegister, setCanRegister] = React.useState(false);
-
-  React.useEffect(() => {
-    axiosInstance.get("/admin/shop").then((res) => {
-      setCanRegister(res.data[0].registerActive);
+      console.log(res.data);
+      if (res.data.length === 0) {
+        axiosInstance.post(
+          "/admin/shop/",
+          {},
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: localStorage.getItem("token"),
+            },
+          }
+        );
+      }
+      // console.log(res.data[0].shopName);
+      if (res.data.length !== 0)
+        setTitle({ id: res.data[0]["_id"], shopName: res.data[0].shopName });
+      axiosInstance.get("/admin/shop").then((res) => {
+        if (res.data.length !== 0) setCanRegister(res.data[0].registerActive);
+      });
     });
   }, []);
 

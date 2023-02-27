@@ -54,7 +54,10 @@ const Register = () => {
             validationSchema={Yup.object({
               username: Yup.string()
                 .required("Required")
-                .notOneOf(existingUser, "This admin is regestered before"),
+                .notOneOf(
+                  existingUser,
+                  "This admin has been regestered before"
+                ),
               password: Yup.string()
                 .required("Required")
                 .min(6, "Password is too short - should be 6 chars minimum.")
@@ -68,11 +71,17 @@ const Register = () => {
               email: Yup.string()
                 .email("Please enter a valid Email")
                 .required("Required")
-                .notOneOf(existingEmail, "This email is regestered before"),
+                .notOneOf(
+                  existingEmail,
+                  "This email has been regestered before"
+                ),
               phone: Yup.string()
                 .required("Required")
                 .matches(phoneRegExp, "Please enter a valid phone number")
-                .notOneOf(existingPhone, "This phone is regestered before"),
+                .notOneOf(
+                  existingPhone,
+                  "This phone has been regestered before"
+                ),
             })}
             onSubmit={(values, { setSubmitting }) => {
               setSubmitting(false);
