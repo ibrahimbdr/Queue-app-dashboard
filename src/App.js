@@ -12,6 +12,7 @@ import PrevCustomers from "./pages/PrevCustomers";
 import PrevAppointments from "./pages/PrevAppointments";
 import Settings from "./pages/Settings";
 import Register from "./pages/Register";
+import NotFound from "./pages/NotFound";
 import titleContext from "./context/TitleContext";
 import axiosInstance from "./axios config/axiosInstance";
 import registerContext from "./context/RegisterContext";
@@ -103,31 +104,35 @@ function App() {
                       sidebarExtend={sidebarExtend}
                       setSidebarExtend={setSidebarExtend}
                     />
+
                     <Bottombar />
                   </div>
                 )}
-                <Routes>
-                  <Route path="/" exact element={<Home />} />
-                  <Route path="/customers" exact element={<Customers />} />
-                  <Route
-                    path="/customers-n"
-                    exact
-                    element={<PrevCustomers />}
-                  />
-                  <Route
-                    path="/appointments"
-                    exact
-                    element={<Appointments />}
-                  />
-                  <Route
-                    path="/appointments-f"
-                    exact
-                    element={<PrevAppointments />}
-                  />
-                  <Route path="/settings" exact element={<Settings />} />
-                  <Route path="/login" exact element={<Login />} />
-                  <Route path="/register" exact element={<Register />} />
-                </Routes>
+                <div className="mb-[54px] md:mb-0 w-full">
+                  <Routes>
+                    <Route path="/" exact element={<Home />} />
+                    <Route path="/customers" exact element={<Customers />} />
+                    <Route
+                      path="/customers-n"
+                      exact
+                      element={<PrevCustomers />}
+                    />
+                    <Route
+                      path="/appointments"
+                      exact
+                      element={<Appointments />}
+                    />
+                    <Route
+                      path="/appointments-f"
+                      exact
+                      element={<PrevAppointments />}
+                    />
+                    <Route path="/settings" exact element={<Settings />} />
+                    <Route path="/login" exact element={<Login />} />
+                    <Route path="/register" exact element={<Register />} />
+                    <Route path="*" exact element={<NotFound />} />
+                  </Routes>
+                </div>
               </Router>
             </div>
           </sidebarContext.Provider>

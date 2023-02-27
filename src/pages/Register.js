@@ -5,6 +5,7 @@ import axiosInstance from "../axios config/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import loginContext from "../context/LoginContext";
 import sidebarContext from "../context/SidebarContext";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const { state, setSidebarExtend, setColorMode } =
@@ -42,176 +43,158 @@ const Register = () => {
       <div className="w-screen h-screen flex flex-col justify-center items-center">
         <h1 className="text-4xl mb-3 font-medium">Register</h1>
 
-        {login.state.accountType === "admin" && (
-          <Formik
-            initialValues={{
-              username: "",
-              password: "",
-              c_password: "",
-              email: "",
-              phone: "",
-            }}
-            validationSchema={Yup.object({
-              username: Yup.string()
-                .required("Required")
-                .notOneOf(
-                  existingUser,
-                  "This admin has been regestered before"
-                ),
-              password: Yup.string()
-                .required("Required")
-                .min(6, "Password is too short - should be 6 chars minimum.")
-                .matches(
-                  /[a-zA-Z0-9]/,
-                  "Password can only contain Latin letters."
-                ),
-              c_password: Yup.string()
-                .required("Required")
-                .oneOf([Yup.ref("password"), null], "Passwords must match"),
-              email: Yup.string()
-                .email("Please enter a valid Email")
-                .required("Required")
-                .notOneOf(
-                  existingEmail,
-                  "This email has been regestered before"
-                ),
-              phone: Yup.string()
-                .required("Required")
-                .matches(phoneRegExp, "Please enter a valid phone number")
-                .notOneOf(
-                  existingPhone,
-                  "This phone has been regestered before"
-                ),
-            })}
-            onSubmit={(values, { setSubmitting }) => {
-              setSubmitting(false);
-              console.log(JSON.stringify(values));
-              axiosInstance
-                .post(
-                  "/admin/",
+        <Formik
+          initialValues={{
+            username: "",
+            password: "",
+            c_password: "",
+            email: "",
+            phone: "",
+          }}
+          validationSchema={Yup.object({
+            username: Yup.string()
+              .required("Required")
+              .notOneOf(existingUser, "This admin has been regestered before"),
+            password: Yup.string()
+              .required("Required")
+              .min(6, "Password is too short - should be 6 chars minimum.")
+              .matches(
+                /[a-zA-Z0-9]/,
+                "Password can only contain Latin letters."
+              ),
+            c_password: Yup.string()
+              .required("Required")
+              .oneOf([Yup.ref("password"), null], "Passwords must match"),
+            email: Yup.string()
+              .email("Please enter a valid Email")
+              .required("Required")
+              .notOneOf(existingEmail, "This email has been regestered before"),
+            phone: Yup.string()
+              .required("Required")
+              .matches(phoneRegExp, "Please enter a valid phone number")
+              .notOneOf(existingPhone, "This phone has been regestered before"),
+          })}
+          onSubmit={(values, { setSubmitting }) => {
+            setSubmitting(false);
+            console.log(JSON.stringify(values));
+            axiosInstance
+              .post(
+                "/admin/",
 
-                  {
-                    username: values.username,
-                    password: values.password,
-                    email: values.email,
-                    phone: values.phone,
+                {
+                  username: values.username,
+                  password: values.password,
+                  email: values.email,
+                  phone: values.phone,
+                },
+                {
+                  headers: {
+                    "Content-Type": "application/json",
                   },
-                  {
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                  }
-                )
-                .then((res) => {
-                  console.log(res);
-                  navigate("/login");
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-              setManagerRegModel(true);
-            }}
-          >
-            {({ isSubmitting }) => (
-              <Form
-                className={`${
-                  state.colorMode === "dark" ? "bg-gray-900" : "bg-gray-50"
-                } w-[300px] sm:w-[500px]`}
+                }
+              )
+              .then((res) => {
+                console.log(res);
+                navigate("/login");
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+            setManagerRegModel(true);
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form
+              className={`${
+                state.colorMode === "dark" ? "bg-gray-900" : "bg-gray-50"
+              } w-[300px] sm:w-[500px]`}
+            >
+              <div
+                className={`p-4 shadow ${
+                  state.colorMode === "dark"
+                    ? "bg-gray-900 text-cyan-700"
+                    : "bg-gray-50 text-black"
+                } rounded`}
               >
-                <div
-                  className={`p-4 shadow ${
-                    state.colorMode === "dark"
-                      ? "bg-gray-900 text-cyan-700"
-                      : "bg-gray-50 text-black"
-                  } rounded`}
-                >
-                  <div className="my-4 w-full">
-                    <label htmlFor="username" className="block">
-                      Username
-                    </label>
-                    <Field
-                      type="text"
-                      name="username"
-                      className="h-10 rounded w-full p-1"
-                    />
-                    <ErrorMessage name="username">
-                      {(msg) => (
-                        <div className="text-sm text-red-500">{msg}</div>
-                      )}
-                    </ErrorMessage>
-                  </div>
-                  <div className="my-4 w-full">
-                    <label htmlFor="password" className="block">
-                      Password
-                    </label>
-                    <Field
-                      type="password"
-                      name="password"
-                      className="h-10 rounded w-full p-1"
-                    />
-                    <ErrorMessage name="password">
-                      {(msg) => (
-                        <div className="text-sm text-red-500">{msg}</div>
-                      )}
-                    </ErrorMessage>
-                  </div>
-                  <div className="my-4 w-full">
-                    <label htmlFor="c_password" className="block">
-                      Confirm Password
-                    </label>
-                    <Field
-                      type="password"
-                      name="c_password"
-                      className="h-10 rounded w-full p-1"
-                    />
-                    <ErrorMessage name="c_password">
-                      {(msg) => (
-                        <div className="text-sm text-red-500">{msg}</div>
-                      )}
-                    </ErrorMessage>
-                  </div>
-                  <div className="my-4 w-full">
-                    <label htmlFor="email" className="block">
-                      Email Address
-                    </label>
-                    <Field
-                      type="email"
-                      name="email"
-                      className="h-10 rounded w-full p-1"
-                    />
-                    <ErrorMessage name="email">
-                      {(msg) => (
-                        <div className="text-sm text-red-500">{msg}</div>
-                      )}
-                    </ErrorMessage>
-                  </div>
-                  <div className="my-4 w-full">
-                    <label htmlFor="phone" className="block">
-                      Phone Number
-                    </label>
-                    <Field
-                      type="text"
-                      name="phone"
-                      className="h-10 rounded w-full p-1"
-                    />
-                    <ErrorMessage name="phone">
-                      {(msg) => (
-                        <div className="text-sm text-red-500">{msg}</div>
-                      )}
-                    </ErrorMessage>
-                  </div>
-                  <button
-                    type="submit"
-                    className="text-xl mt-3 border border-gray-800 hover:bg-gray-800 hover:text-white mx-5 w-32 text-center rounded  py-2 transition-all"
-                    disabled={isSubmitting}
-                  >
-                    Add
-                  </button>
+                <div className="my-4 w-full">
+                  <label htmlFor="username" className="block">
+                    Username
+                  </label>
+                  <Field
+                    type="text"
+                    name="username"
+                    className="h-10 rounded w-full p-1"
+                  />
+                  <ErrorMessage name="username">
+                    {(msg) => <div className="text-sm text-red-500">{msg}</div>}
+                  </ErrorMessage>
                 </div>
-              </Form>
-            )}
-          </Formik>
-        )}
+                <div className="my-4 w-full">
+                  <label htmlFor="password" className="block">
+                    Password
+                  </label>
+                  <Field
+                    type="password"
+                    name="password"
+                    className="h-10 rounded w-full p-1"
+                  />
+                  <ErrorMessage name="password">
+                    {(msg) => <div className="text-sm text-red-500">{msg}</div>}
+                  </ErrorMessage>
+                </div>
+                <div className="my-4 w-full">
+                  <label htmlFor="c_password" className="block">
+                    Confirm Password
+                  </label>
+                  <Field
+                    type="password"
+                    name="c_password"
+                    className="h-10 rounded w-full p-1"
+                  />
+                  <ErrorMessage name="c_password">
+                    {(msg) => <div className="text-sm text-red-500">{msg}</div>}
+                  </ErrorMessage>
+                </div>
+                <div className="my-4 w-full">
+                  <label htmlFor="email" className="block">
+                    Email Address
+                  </label>
+                  <Field
+                    type="email"
+                    name="email"
+                    className="h-10 rounded w-full p-1"
+                  />
+                  <ErrorMessage name="email">
+                    {(msg) => <div className="text-sm text-red-500">{msg}</div>}
+                  </ErrorMessage>
+                </div>
+                <div className="my-4 w-full">
+                  <label htmlFor="phone" className="block">
+                    Phone Number
+                  </label>
+                  <Field
+                    type="text"
+                    name="phone"
+                    className="h-10 rounded w-full p-1"
+                  />
+                  <ErrorMessage name="phone">
+                    {(msg) => <div className="text-sm text-red-500">{msg}</div>}
+                  </ErrorMessage>
+                </div>
+                <button
+                  type="submit"
+                  className="text-xl mt-3 border border-gray-800 hover:bg-gray-800 hover:text-white mx-5 w-32 text-center rounded  py-2 transition-all"
+                  disabled={isSubmitting}
+                >
+                  Add
+                </button>
+              </div>
+            </Form>
+          )}
+        </Formik>
+        <Link className="text-blue-600 text-sm underline" to="/login">
+          If you already have an account you can sign in here
+        </Link>
       </div>
     );
   }

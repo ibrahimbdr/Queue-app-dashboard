@@ -5,6 +5,7 @@ import axiosInstance from "../axios config/axiosInstance";
 import { Link, useNavigate } from "react-router-dom";
 import loginContext from "../context/LoginContext";
 import registerContext from "../context/RegisterContext";
+import sidebarContext from "../context/SidebarContext";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -12,6 +13,8 @@ const Login = () => {
   const [formErrorAdmin, setFormErrorAdmin] = React.useState(false);
   const [formErrorManager, setFormErrorManager] = React.useState(false);
   const register = React.useContext(registerContext);
+  const { state, setSidebarExtend, setColorMode } =
+    React.useContext(sidebarContext);
 
   React.useEffect(() => {
     if (login.state.isLoggged === true) navigate("/");
@@ -21,24 +24,36 @@ const Login = () => {
     return (
       <div className="w-screen h-screen flex flex-col justify-center items-center">
         <h1 className="text-4xl mb-3 font-medium">Login</h1>
-        <div className="p-1 rounded-full bg-gray-300 my-2">
+        <div
+          className={`p-1 my-2 flex items-center ${
+            state.colorMode === "dark" ? "bg-gray-900" : "bg-gray-100"
+          } rounded-full w-fit `}
+        >
           <button
             onClick={() => login.setAccountType("admin")}
-            className={`${
-              login.state.accountType === "admin"
-                ? "bg-gray-100 shadow"
-                : "bg-gray-300 shadow-inner"
-            } rounded-l-full text-gray-900 p-1 w-32`}
+            className={`p-2 rounded-l-full w-32 ${
+              state.colorMode === "dark"
+                ? login.state.accountType === "manager"
+                  ? "shadow text-gray-300"
+                  : "bg-gray-600  text-cyan-700 shadow-inner"
+                : login.state.accountType === "admin"
+                ? "shadow"
+                : "bg-gray-300 shadow"
+            }`}
           >
             Admin
           </button>
           <button
             onClick={() => login.setAccountType("manager")}
-            className={`${
-              login.state.accountType === "manager"
-                ? "bg-gray-100 shadow"
-                : "bg-gray-300 shadow-inner"
-            } rounded-r-full text-gray-900 p-1 w-32`}
+            className={`p-2 rounded-r-full w-32 ${
+              state.colorMode === "dark"
+                ? login.state.accountType === "admin"
+                  ? "shadow text-gray-300"
+                  : "bg-gray-600  text-cyan-700 shadow-inner"
+                : login.state.accountType === "manager"
+                ? "shadow"
+                : "bg-gray-300 shadow"
+            }`}
           >
             Manager
           </button>
@@ -78,8 +93,14 @@ const Login = () => {
             }}
           >
             {({ isSubmitting }) => (
-              <Form>
-                <div className="p-4 shadow bg-gray-300 rounded min-w-[300px]">
+              <Form
+                className={`${
+                  state.colorMode === "dark"
+                    ? "bg-gray-900 text-cyan-700"
+                    : "bg-gray-50"
+                }`}
+              >
+                <div className="p-4 shadow rounded min-w-[300px]">
                   <div className="my-4 w-full">
                     <label htmlFor="username" className="block">
                       Username
@@ -162,8 +183,14 @@ const Login = () => {
             }}
           >
             {({ isSubmitting }) => (
-              <Form>
-                <div className="p-4 shadow bg-gray-300 rounded min-w-[300px]">
+              <Form
+                className={`${
+                  state.colorMode === "dark"
+                    ? "bg-gray-900 text-cyan-700"
+                    : "bg-gray-50"
+                }`}
+              >
+                <div className="p-4 shadow rounded min-w-[300px]">
                   <div className="my-4 w-full">
                     <label htmlFor="username" className="block">
                       Username
