@@ -14,6 +14,7 @@ import sidebarContext from "../context/SidebarContext";
 import loginContext from "../context/LoginContext";
 import { useNavigate } from "react-router-dom";
 import titleContext from "../context/TitleContext";
+import axiosInstance from "../axios config/axiosInstance";
 
 const Sidebar = () => {
   const { state, setSidebarExtend } = React.useContext(sidebarContext);
@@ -25,6 +26,30 @@ const Sidebar = () => {
     login.setIsLogged(false);
     navigate("/login");
   };
+
+  React.useEffect(() => {
+    if (login.state.accountType === "admin") {
+      axiosInstance.get("/admin/shop/").then((res) => {
+        if (res.data[0] === null) {
+          axiosInstance.post(
+            "/admin/shop/",
+            {},
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: localStorage.getItem("token"),
+              },
+            }
+          );
+        }
+        console.log(res.data[0].shopName);
+        shopTitle.setTitle({
+          id: res.data[0]["_id"],
+          shopName: res.data[0].shopName,
+        });
+      });
+    }
+  }, [shopTitle]);
   return (
     <div
       className={`self-start shadow-lg fixed top-0 h-screen overflow-auto hidden md:block ${
@@ -39,26 +64,31 @@ const Sidebar = () => {
         } items-center`}
       >
         {state.sidebarExtend && (
-          <h1 className="text-gray-800 font-bold text-xl">
+          <h1
+            className={`font-bold text-xl ${
+              state.colorMode === "dark" && "text-gray-100"
+            } ${state.colorMode === "light" && "text-gray-800"}`}
+          >
             {shopTitle.state.title.shopName}
           </h1>
         )}
         {state.sidebarExtend ? (
           <button
             onClick={() => setSidebarExtend(false)}
-            className="rounded-full p-3 hover:bg-gray-300 transition-all"
+            className={`rounded-full p-3 hover:bg-gray-300 transition-all ${
+              state.colorMode === "dark" && "text-gray-100"
+            } ${state.colorMode === "light" && "text-gray-800"}`}
           >
-            <BsArrowLeft className="text-gray-800 hover:text-white" size={30} />
+            <BsArrowLeft className=" hover:text-white" size={30} />
           </button>
         ) : (
           <button
             onClick={() => setSidebarExtend(true)}
-            className="rounded-full p-3 hover:bg-gray-300 transition-all"
+            className={`rounded-full p-3 hover:bg-gray-300 transition-all ${
+              state.colorMode === "dark" && "text-gray-100"
+            } ${state.colorMode === "light" && "text-gray-800"}`}
           >
-            <BsArrowRight
-              className="text-gray-800 hover:text-white"
-              size={30}
-            />
+            <BsArrowRight className=" hover:text-white" size={30} />
           </button>
         )}
       </div>

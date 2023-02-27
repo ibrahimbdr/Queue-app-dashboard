@@ -51,25 +51,27 @@ const Settings = () => {
     // protecting setting page to prevent access whenever you are not logged in
     if (login.state.isLoggged === false) navigate("/login");
     // updating shop name
-    axiosInstance.get("/admin/shop/").then((res) => {
-      if (res.data[0] === null) {
-        axiosInstance.post(
-          "/admin/shop/",
-          {},
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: localStorage.getItem("token"),
-            },
-          }
-        );
-      }
-      console.log(res.data[0].shopName);
-      shopTitle.setTitle({
-        id: res.data[0]["_id"],
-        shopName: res.data[0].shopName,
+    if (login.state.accountType === "admin") {
+      axiosInstance.get("/admin/shop/").then((res) => {
+        if (res.data[0] === null) {
+          axiosInstance.post(
+            "/admin/shop/",
+            {},
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: localStorage.getItem("token"),
+              },
+            }
+          );
+        }
+        console.log(res.data[0].shopName);
+        shopTitle.setTitle({
+          id: res.data[0]["_id"],
+          shopName: res.data[0].shopName,
+        });
       });
-    });
+    }
 
     // getting registered managers
     if (login.state.accountType === "admin") {

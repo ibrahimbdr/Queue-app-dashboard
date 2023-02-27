@@ -12,12 +12,34 @@ const Login = () => {
   const login = React.useContext(loginContext);
   const [formErrorAdmin, setFormErrorAdmin] = React.useState(false);
   const [formErrorManager, setFormErrorManager] = React.useState(false);
+  const [existingAdmins, setExistingAdmins] = React.useState([]);
+  const [existingManagers, setExistingManagers] = React.useState([]);
   const register = React.useContext(registerContext);
   const { state, setSidebarExtend, setColorMode } =
     React.useContext(sidebarContext);
 
   React.useEffect(() => {
     if (login.state.isLoggged === true) navigate("/");
+
+    axiosInstance.get("/admin/checkmaching").then((res) => {
+      let arr = [];
+
+      res.data.forEach((admin) => {
+        arr.push(admin.username);
+      });
+      console.log(arr);
+      setExistingAdmins(arr);
+    });
+
+    axiosInstance.get("/manager/checkmaching").then((res) => {
+      let arr = [];
+
+      res.data.forEach((manager) => {
+        arr.push(manager.username);
+      });
+      console.log(arr);
+      setExistingManagers(arr);
+    });
   }, []);
 
   if (login.state.isLoggged === false) {
@@ -62,7 +84,9 @@ const Login = () => {
           <Formik
             initialValues={{ username: "", password: "" }}
             validationSchema={Yup.object({
-              username: Yup.string().required("Required"),
+              username: Yup.string()
+                .required("Required")
+                .oneOf(existingAdmins, "This admin is not regestered"),
               password: Yup.string().required("Required"),
             })}
             onSubmit={(values, { setSubmitting }) => {
@@ -152,7 +176,9 @@ const Login = () => {
           <Formik
             initialValues={{ username: "", password: "" }}
             validationSchema={Yup.object({
-              username: Yup.string().required("Required"),
+              username: Yup.string()
+                .required("Required")
+                .oneOf(existingManagers, "This manager is not regestered"),
               password: Yup.string().required("Required"),
             })}
             onSubmit={(values, { setSubmitting }) => {

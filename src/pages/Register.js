@@ -40,7 +40,7 @@ const Register = () => {
 
   if (login.state.isLoggged === false) {
     return (
-      <div className="w-screen h-screen flex flex-col justify-center items-center">
+      <div className="w-screen h-full flex flex-col justify-center items-center">
         <h1 className="text-4xl mb-3 font-medium">Register</h1>
 
         <Formik
@@ -186,7 +186,7 @@ const Register = () => {
                   className="text-xl mt-3 border border-gray-800 hover:bg-gray-800 hover:text-white mx-5 w-32 text-center rounded  py-2 transition-all"
                   disabled={isSubmitting}
                 >
-                  Add
+                  Register
                 </button>
               </div>
             </Form>

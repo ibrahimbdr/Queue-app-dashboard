@@ -108,7 +108,7 @@ function App() {
                     <Bottombar />
                   </div>
                 )}
-                <div className="mb-[54px] md:mb-0 w-full">
+                <div className="mb-[54px] md:mb-0 w-full h-full">
                   <Routes>
                     <Route path="/" exact element={<Home />} />
                     <Route path="/customers" exact element={<Customers />} />
