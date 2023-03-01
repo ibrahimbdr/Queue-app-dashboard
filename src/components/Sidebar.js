@@ -49,7 +49,7 @@ const Sidebar = () => {
         });
       });
     }
-  }, [shopTitle]);
+  }, []);
   return (
     <div
       className={`self-start shadow-lg fixed top-0 h-screen overflow-auto hidden md:block ${
