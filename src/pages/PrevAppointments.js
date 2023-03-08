@@ -6,7 +6,7 @@ import Sidebar from "../components/Sidebar";
 import Bottombar from "../components/Bottombar";
 import loginContext from "../context/LoginContext";
 import { useNavigate } from "react-router-dom";
-import { FaTrash } from "react-icons/fa";
+import { TiTrash } from "react-icons/ti";
 
 const PrevAppointments = () => {
   const { state, setSidebarExtend } = React.useContext(sidebarContext);
@@ -341,7 +341,7 @@ const PrevAppointments = () => {
                               } whitespace-nowrap`}
                             >
                               <button>
-                                <FaTrash
+                                <TiTrash
                                   className="text-red-500 text-center"
                                   onClick={() =>
                                     handleDeleteApp(appointment._id)
