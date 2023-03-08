@@ -6,6 +6,7 @@ import Sidebar from "../components/Sidebar";
 import Bottombar from "../components/Bottombar";
 import loginContext from "../context/LoginContext";
 import { useNavigate } from "react-router-dom";
+import { FaTrash } from "react-icons/fa";
 
 const PrevAppointments = () => {
   const { state, setSidebarExtend } = React.useContext(sidebarContext);
@@ -107,6 +108,39 @@ const PrevAppointments = () => {
     }
   }, []);
 
+  function handleDeleteApp(id) {
+    axiosInstance
+      .delete(`/admin/appointment/${id}`, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    axiosInstance
+      .get(`/admin/appointment`, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        let finishedApp = res.data.filter((data) => {
+          return data.status === "Finished";
+        });
+        setAppointments(sliceIntoChunks(finishedApp, 10));
+
+        console.log(appointments);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   React.useEffect(() => {
     if (login.state.isLoggged === false) navigate("/login");
   }, []);
@@ -133,6 +167,7 @@ const PrevAppointments = () => {
                         </th> */}
                       <th
                         scope="col"
+                        style={{ width: "15%" }}
                         className={`px-2 py-3 text-start text-xs font-bold ${
                           state.colorMode === "dark"
                             ? "text-cyan-700"
@@ -180,6 +215,17 @@ const PrevAppointments = () => {
                         } uppercase `}
                       >
                         Status
+                      </th>
+                      <th
+                        scope="col"
+                        className={`py-3 px-2 text-start text-xs font-bold ${
+                          state.colorMode === "dark"
+                            ? "text-cyan-700"
+                            : "text-gray-500"
+                        } uppercase `}
+                        style={{ width: "5%" }}
+                      >
+                        Delete
                       </th>
                       {/* <th
                           scope="col"
@@ -286,6 +332,23 @@ const PrevAppointments = () => {
                                 </p>
                               }
                             </td>
+                            <th
+                              scope="col"
+                              className={` py-4 my-auto flex justify-center items-center w-full h-[60.5px] text-sm ${
+                                state.colorMode === "dark"
+                                  ? "text-gray-400"
+                                  : "text-gray-800"
+                              } whitespace-nowrap`}
+                            >
+                              <button>
+                                <FaTrash
+                                  className="text-red-500 text-center"
+                                  onClick={() =>
+                                    handleDeleteApp(appointment._id)
+                                  }
+                                />
+                              </button>
+                            </th>
                             {/* <td className="px-2 py-4 text-start text-sm font-medium rounded whitespace-nowrap">
                                 <button
                                   onClick={() =>
