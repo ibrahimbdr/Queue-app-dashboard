@@ -8,7 +8,6 @@ import sidebarContext from "../context/SidebarContext";
 import { BiDownArrow, BiUpArrow } from "react-icons/bi";
 import { MdControlPoint, MdLightMode, MdNightlight } from "react-icons/md";
 import loginContext from "../context/LoginContext";
-import RegisterModel from "../components/RegisterModel";
 import titleContext from "../context/TitleContext";
 import { useNavigate } from "react-router-dom";
 import Alert from "../components/Alert";

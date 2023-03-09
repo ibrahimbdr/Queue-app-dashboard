@@ -7,6 +7,7 @@ import Bottombar from "../components/Bottombar";
 import loginContext from "../context/LoginContext";
 import { useNavigate } from "react-router-dom";
 import { TiTrash } from "react-icons/ti";
+import ConfirmModel from "../components/ConfirmModel";
 
 const PrevAppointments = () => {
   const { state, setSidebarExtend } = React.useContext(sidebarContext);
@@ -17,6 +18,7 @@ const PrevAppointments = () => {
   const navigate = useNavigate();
 
   const [page, setPage] = React.useState(1);
+  const [resetModel, setResetModel] = React.useState(false);
 
   function sliceIntoChunks(arr, chunkSize) {
     const res = [];
@@ -109,36 +111,137 @@ const PrevAppointments = () => {
   }, []);
 
   function handleDeleteApp(id) {
-    axiosInstance
-      .delete(`/admin/appointment/${id}`, {
-        headers: {
-          Authorization: token,
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    axiosInstance
-      .get(`/admin/appointment`, {
-        headers: {
-          Authorization: token,
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        let finishedApp = res.data.filter((data) => {
-          return data.status === "Finished";
+    if (login.state.accountType === "admin") {
+      axiosInstance
+        .delete(`/admin/appointment/${id}`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
         });
-        setAppointments(sliceIntoChunks(finishedApp, 10));
+      axiosInstance
+        .get(`/admin/appointment`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          let finishedApp = res.data.filter((data) => {
+            return data.status === "Finished";
+          });
+          setAppointments(sliceIntoChunks(finishedApp, 10));
 
-        console.log(appointments);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+          console.log(appointments);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    if (login.state.accountType === "manager") {
+      axiosInstance
+        .delete(`/manager/appointment/${id}`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      axiosInstance
+        .get(`/manager/appointment`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          let finishedApp = res.data.filter((data) => {
+            return data.status === "Finished";
+          });
+          setAppointments(sliceIntoChunks(finishedApp, 10));
+
+          console.log(appointments);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
+
+  function handleResetAllAppointments() {
+    if (login.state.accountType === "admin") {
+      axiosInstance
+        .delete(`/admin/appointment/`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      axiosInstance
+        .get(`/admin/appointment`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          let finishedApp = res.data.filter((data) => {
+            return data.status === "Finished";
+          });
+          setAppointments(sliceIntoChunks(finishedApp, 10));
+
+          console.log(appointments);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    if (login.state.accountType === "manager") {
+      axiosInstance
+        .delete(`/manager/appointment/`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      axiosInstance
+        .get(`/manager/appointment`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          let finishedApp = res.data.filter((data) => {
+            return data.status === "Finished";
+          });
+          setAppointments(sliceIntoChunks(finishedApp, 10));
+
+          console.log(appointments);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }
 
   React.useEffect(() => {
@@ -147,6 +250,13 @@ const PrevAppointments = () => {
   if (login.state.isLoggged === true) {
     return (
       <div className={`p-6 mb-4 w-full`}>
+        {resetModel && (
+          <ConfirmModel
+            handleResetAllAppointments={handleResetAllAppointments}
+            resetModel={resetModel}
+            setResetModel={setResetModel}
+          />
+        )}
         <h1 className="text-2xl font-bold mb-14">History</h1>
         <div className="flex flex-col">
           <div className="overflow-x-auto">
@@ -343,6 +453,7 @@ const PrevAppointments = () => {
                               <button>
                                 <TiTrash
                                   className="text-red-500 text-center"
+                                  size={20}
                                   onClick={() =>
                                     handleDeleteApp(appointment._id)
                                   }
@@ -368,6 +479,14 @@ const PrevAppointments = () => {
                     )}
                   </tbody>
                 </table>
+              </div>
+              <div className="w-full flex justify-end items-center">
+                <button
+                  className="bg-red-500 text-white font-bold text-sm px-2 py-1 my-1 rounded"
+                  onClick={() => setResetModel(true)}
+                >
+                  Reset All
+                </button>
               </div>
               <div className="flex justify-center my-4">
                 {appointments.map((pg, index) => {
